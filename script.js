@@ -83,7 +83,7 @@ for (let i = 0; i < this.cryptoSymbols.length; i++) {
             const successfulResults = results
                 .filter(r => r.status === 'fulfilled' && r.value)
                 .map(r => r.value)
-                .filter(data => data && data.levelStrength === 'قوي');
+                .filter(data => data && (data.levelStrength === 'قوي' || data.levelStrength === 'متوسط'));
 
             this.cryptoData = new Map(successfulResults.map(data => [data.symbol + 'USDT', data]));
 
