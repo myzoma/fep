@@ -60,8 +60,8 @@ class FibonacciCryptoTracker {
             
             try {
                 const [tickerResponse, klineResponse] = await Promise.all([
-                    fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`),
-                    fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=50`)
+                    fetch(`https://api1.binance.com/api/v3/ticker/24hr?symbol=${symbol}`),
+                    fetch(`https://api1.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=50`)
                 ]);
                 
                 if (tickerResponse.ok && klineResponse.ok) {
