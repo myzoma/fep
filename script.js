@@ -18,7 +18,26 @@ async function getAllSymbols() {
     const [binance, okx] = await Promise.all([fetchBinanceSymbols(), fetchOkxSymbols()]);
     return Array.from(new Set([...binance, ...okx]));
 }
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
+async function fetchAllCryptoDataWithDelay(symbols) {
+    const results = [];
+    for (let i = 0; i < symbols.length; i++) {
+        const symbol = symbols[i];
+        // جلب البيانات للعملة
+        try {
+            const result = await fetchCryptoData(symbol);
+            results.push(result);
+        } catch (e) {
+            // تجاهل الأخطاء أو سجلها
+        }
+        // تأخير تدريجي بين كل طلب (مثلاً 500 مللي ثانية)
+        await sleep(500);
+    }
+    return results;
+}
 class FibonacciCryptoTracker {
     constructor() {
         this.cryptoData = new Map();
@@ -47,9 +66,18 @@ class FibonacciCryptoTracker {
 
     async fetchAllCryptoData() {
         try {
-            const promises = this.cryptoSymbols.map(symbol => this.fetchCryptoData(symbol));
-            // لتقليل الضغط على API، يمكن استخدام دفعات أو تفعيل limit (ليس مفعلاً هنا)
-            const results = await Promise.allSettled(promises);
+            const results = [];
+for (let i = 0; i < this.cryptoSymbols.length; i++) {
+    const symbol = this.cryptoSymbols[i];
+    try {
+        const result = await this.fetchCryptoData(symbol);
+        results.push({ status: 'fulfilled', value: result });
+    } catch (e) {
+        results.push({ status: 'rejected', reason: e });
+    }
+    // تأخير 500 مللي ثانية بين كل طلب
+    await sleep(500);
+}
 
             // فقط العملات التي تحقق شرط "قوة فيبوناتشي = قوي"
             const successfulResults = results
