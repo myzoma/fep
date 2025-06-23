@@ -10,6 +10,7 @@
     --success-color: #00c853;
     --danger-color: #ff3547;
     --info-color: #00bcd4;
+    --empty-bg: #222b;
 }
 
 * {
@@ -86,6 +87,20 @@ body {
     gap: 20px;
     max-width: 1400px;
     margin: 0 auto;
+    min-height: 200px;
+}
+
+.empty-message {
+    grid-column: 1/-1;
+    background: var(--empty-bg);
+    color: var(--text-muted);
+    padding: 40px 10px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    text-align: center;
+    margin: 30px 0;
+    font-weight: bold;
+    letter-spacing: 0.5px;
 }
 
 @media (min-width: 768px) {
@@ -291,26 +306,43 @@ body {
     font-size: 0.8rem;
     color: var(--text-muted);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+}
+
+.footer {
+    margin-top: 32px;
+    text-align: center;
+    color: #888;
+    font-size: 0.9em;
+    background: var(--bg-card);
+    padding: 18px 10px 10px 10px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
 }
 
 @media (max-width: 768px) {
     .container {
         padding: 10px;
     }
-    
+
     .header h1 {
         font-size: 2rem;
     }
-    
+
     .update-info {
         flex-direction: column;
         gap: 5px;
     }
-    
+
     .crypto-card {
         padding: 15px;
     }
-    
+
+    .empty-message {
+        font-size: 1rem;
+        padding: 20px 5px;
+    }
+
     .data-source {
         position: static;
         margin-top: 20px;
