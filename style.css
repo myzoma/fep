@@ -88,11 +88,12 @@ body {
 }
 
 /* أيقونة العملة */
+/* أيقونة العملة */
 .header .fas.fa-coins {
     color: var(--secondary-color);
-    font-size: 2.5rem;
-    margin-left: 15px;
+    font-size: 2.2rem;
     animation: coinSpin 4s linear infinite;
+    margin: 0; /* إزالة المارجن */
 }
 
 /* كلمة CRYPTO - لون سماوي */
