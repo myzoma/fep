@@ -348,6 +348,90 @@ body {
 .ratio-value:hover {
     transform: translateY(-2px) scale(1.05);
 }
+/* إضافة قاعدة محددة لـ "قوي جداً" */
+.strength-value.قوي-جداً,
+.golden-strength.قوي-جداً,
+.ratio-value.قوي-جداً {
+    background: linear-gradient(135deg, #00c853, #00ff64) !important;
+    color: white !important;
+    border: 2px solid #00c853 !important;
+    text-shadow: 0 0 10px rgba(0, 200, 83, 0.8) !important;
+    box-shadow: 0 0 20px rgba(0, 200, 83, 0.5) !important;
+}
+
+/* تحسين جميع مستويات القوة */
+.strength-value,
+.golden-strength,
+.ratio-value {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: var(--font-arabic);
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    min-width: 80px;
+    margin: 5px 0;
+    border: 2px solid;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* قوي جداً - أخضر مشع */
+.strength-value:contains("قوي جداً"),
+.strength-value[data-strength="قوي-جداً"],
+.قوي-جداً {
+    background: linear-gradient(135deg, #00c853, #00ff64) !important;
+    color: white !important;
+    border-color: #00c853 !important;
+    text-shadow: 0 0 10px rgba(0, 200, 83, 0.8) !important;
+    box-shadow: 0 0 20px rgba(0, 200, 83, 0.5) !important;
+}
+
+/* قوي - أخضر */
+.strength-value:contains("قوي"),
+.strength-value[data-strength="قوي"],
+.قوي {
+    background: linear-gradient(135deg, #00c853, #4caf50) !important;
+    color: white !important;
+    border-color: #00c853 !important;
+    text-shadow: 0 0 8px rgba(0, 200, 83, 0.6) !important;
+    box-shadow: 0 0 15px rgba(0, 200, 83, 0.4) !important;
+}
+
+/* متوسط - ذهبي */
+.strength-value:contains("متوسط"),
+.strength-value[data-strength="متوسط"],
+.متوسط {
+    background: linear-gradient(135deg, #ffd700, #ffed4e) !important;
+    color: #333 !important;
+    border-color: #ffd700 !important;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6) !important;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4) !important;
+}
+
+/* ضعيف - أحمر */
+.strength-value:contains("ضعيف"),
+.strength-value[data-strength="ضعيف"],
+.ضعيف {
+    background: linear-gradient(135deg, #ff3547, #ff6b7a) !important;
+    color: white !important;
+    border-color: #ff3547 !important;
+    text-shadow: 0 0 8px rgba(255, 53, 71, 0.6) !important;
+    box-shadow: 0 0 15px rgba(255, 53, 71, 0.4) !important;
+}
+
+/* ضعيف جداً - أحمر داكن */
+.strength-value:contains("ضعيف جداً"),
+.strength-value[data-strength="ضعيف-جداً"],
+.ضعيف-جداً {
+    background: linear-gradient(135deg, #d32f2f, #ff3547) !important;
+    color: white !important;
+    border-color: #d32f2f !important;
+    text-shadow: 0 0 8px rgba(211, 47, 47, 0.6) !important;
+    box-shadow: 0 0 15px rgba(211, 47, 47, 0.4) !important;
+}
 
 .strength-strong {
     background: linear-gradient(135deg, #00c853, #00ff64) !important;
