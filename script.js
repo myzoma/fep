@@ -385,84 +385,64 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
         const currentFibPercentage = (currentRatio * 100).toFixed(1);
 
         card.innerHTML = `
-            <div class="card-header">
-                <div class="crypto-name">${data.symbol}</div>
-                <div class="trend-indicator ${trendClass}">${trendText}</div>
-                <div class="golden-ratio-badge">φ = ${data.goldenRatio.toFixed(3)}</div>
-            </div>
-            
-            <div class="price-section">
-                <div class="current-price">$${this.formatPrice(data.currentPrice)}</div>
-                <div class="price-change ${priceChangeClass}">
-                    ${priceChangeSign}${data.priceChange.toFixed(2)}%
-                </div>
-                <div class="current-fib-position">
-                    موقع فيبوناتشي: ${currentFibPercentage}%
-                </div>
-            </div>
-            
-            <div class="mathematical-fibonacci-levels">
-                <div class="fib-header">مستويات فيبوناتشي الرياضية الحقيقية</div>
-                
-                <div class="level-group golden-level">
-                    <div class="level-title">النسبة الذهبية 61.8% (φ⁻¹)</div>
-                    <div class="level-value golden">$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</div>
-                </div>
-                
-                <div class="level-group">
-                    <div class="level-title">مقاومة فيبوناتشي</div>
-                    <div class="level-value resistance">$${this.formatPrice(data.fibLevels.resistance)}</div>
-                </div>
-                
-                <div class="level-group">
-                    <div class="level-title">الهدف التالي (161.8% φ)</div>
-                    <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextResistance)}</div>
-                </div>
-                
-                <div class="level-group">
-                    <div class="level-title">دعم فيبوناتشي</div>
-                    <div class="level-value support">$${this.formatPrice(data.fibLevels.support)}</div>
-                </div>
-                
-                <div class="level-group">
-                    <div class="level-title">الهدف التالي (دعم)</div>
-                    <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextSupport)}</div>
-                </div>
-            </div>
-            
-            <div class="mathematical-details">
-                <div class="math-formula">
-                    <strong>النسب الرياضية المطبقة:</strong><br>
-                    φ = ${data.goldenRatio.toFixed(9)}<br>
-                    1/φ = ${(1/data.goldenRatio).toFixed(9)}<br>
-                    φ² = ${(data.goldenRatio * data.goldenRatio).toFixed(9)}
-                </div>
-                <div class="range-info">
-                    المدى: $${this.formatPrice(data.significantLow)} - $${this.formatPrice(data.significantHigh)}
-                    <br>قيمة المدى: $${this.formatPrice(data.fibLevels.range)}
-                </div>
-            </div>
-            
-            <div class="strength-indicator mathematical">
-                <span class="strength-label">قوة النسبة الذهبية:</span>
-                <span class="strength-value ${this.getStrengthClass(data.levelStrength)}">${data.levelStrength}</span>
-            </div>
-            
-            <div class="strategy-section mathematical">
-                <div class="strategy-title">${data.strategy.title}</div>
-                <div class="strategy-text">${data.strategy.description}</div>
-                <div class="mathematical-basis">
-                    <small><strong>الأساس الرياضي:</strong> ${data.strategy.mathematicalBasis}</small>
-                </div>
-            </div>
-            
-            <div class="fibonacci-sequence">
-                <small><strong>متتالية فيبوناتشي:</strong> 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233...</small>
-            </div>
-        `;
-
-        return card;
-    }
+           const headerTable = `
+        <div class="card-header-table">
+            <table class="crypto-info-table">
+                <thead>
+                    <tr>
+                        <th>العملة</th>
+                        <th>النسبة الذهبية</th>
+                        <th>السعر الحالي</th>
+                        <th>التغيير 24س</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="crypto-cell">
+                            <div class="crypto-name">${data.symbol.replace('USDT', '')}</div>
+                            <div class="trend-indicator ${parseFloat(data.priceChangePercent) >= 0 ? 'trend-up' : 'trend-down'}">
+                                ${parseFloat(data.priceChangePercent) >= 0 ? 'صاعد ↗' : 'هابط ↘'}
+                            </div>
+                        </td>
+                        <td class="golden-ratio-cell">
+                            <div class="golden-symbol">φ = 1.618</div>
+                            <div class="golden-strength">${calculateGoldenRatioStrength(parseFloat(data.lastPrice), fibLevels)}</div>
+                        </td>
+                        <td class="price-cell">
+                            <div class="current-price">$${parseFloat(data.lastPrice).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                        </td>
+                        <td class="change-cell">
+                            <div class="price-change ${parseFloat(data.priceChangePercent) >= 0 ? 'positive' : 'negative'}">
+                                ${parseFloat(data.priceChangePercent) >= 0 ? '+' : ''}${parseFloat(data.priceChangePercent).toFixed(2)}%
+                            </div>
+                            <div class="change-amount ${parseFloat(data.priceChange) >= 0 ? 'positive' : 'negative'}">
+                                ${parseFloat(data.priceChange) >= 0 ? '+' : ''}$${Math.abs(parseFloat(data.priceChange)).toFixed(2)}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    // باقي محتوى البطاقة (مستويات فيبوناتشي، الاستراتيجية، إلخ)
+    const cardContent = `
+        ${headerTable}
+        
+        <div class="fibonacci-levels">
+            <!-- باقي محتوى البطاقة الحالي -->
+            ${generateFibonacciLevelsHTML(fibLevels)}
+        </div>
+        
+        <div class="strategy-section">
+            <!-- الاستراتيجية -->
+            ${generateStrategyHTML(data, fibLevels)}
+        </div>
+    `;
+    
+    card.innerHTML = cardContent;
+    return card;
+}
 
     formatPrice(price) {
         if (price >= 1000) {
