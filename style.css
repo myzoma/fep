@@ -305,9 +305,18 @@ body {
 }
 
 .strength-strong {
-    background: rgba(0, 200, 83, 0.2);
-    color: var(--success-color);
+    background: linear-gradient(135deg, #00c853, #00ff64) !important;
+    color: white !important;
+    border: 2px solid #00c853 !important;
+    padding: 8px 16px !important;
+    border-radius: 20px !important;
+    font-weight: bold !important;
+    text-shadow: 0 0 10px rgba(0, 200, 83, 0.8) !important;
+    box-shadow: 0 0 20px rgba(0, 200, 83, 0.5) !important;
+    display: inline-block !important;
+    margin: 5px !important;
 }
+
 /* تحسين النسبة الذهبية */
 .level-value.golden,
 .next-target {
