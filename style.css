@@ -1,3 +1,25 @@
+/* إضافة الخطوط الجديدة */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --primary-color: #00ccff;
+    --secondary-color: #ffd700;
+    --accent-color: #e74c3c;
+    --bg-dark: #121212;
+    --bg-darker: #0a0a0a;
+    --bg-card: #252525;
+    --text-light: #e0e0e0;
+    --text-muted: #a0aec0;
+    --success-color: #00c853;
+    --danger-color: #ff3547;
+    --info-color: #00bcd4;
+    
+    /* إضافة متغيرات الخطوط الجديدة */
+    --font-arabic: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+    --font-numbers: 'JetBrains Mono', 'Courier New', monospace;
+    --font-english: 'Inter', 'Segoe UI', sans-serif;
+}
+
 :root {
     --primary-color: #00ccff;
     --secondary-color: #ffd700;
@@ -19,7 +41,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--font-arabic); /* بدلاً من 'Segoe UI'... */
     background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
     color: var(--text-light);
     min-height: 100vh;
@@ -133,10 +155,13 @@ body {
     margin-bottom: 15px;
 }
 
+/* ابحث عن .crypto-name وعدّله */
 .crypto-name {
     font-size: 1.4rem;
     font-weight: bold;
     color: var(--primary-color);
+    font-family: var(--font-english); /* إضافة هذا السطر */
+    letter-spacing: 0.05em; /* إضافة هذا السطر */
 }
 
 .trend-indicator {
@@ -162,16 +187,19 @@ body {
     margin-bottom: 20px;
 }
 
-.current-price {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: var(--text-light);
-    margin-bottom: 5px;
+/* تحسين عرض الأرقام */
+.current-price,
+.level-value,
+.price-change {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.025em;
 }
 
+/* ابحث عن .price-change وعدّله */
 .price-change {
     font-size: 1rem;
     font-weight: bold;
+    font-family: var(--font-numbers); /* إضافة هذا السطر */
 }
 
 .positive {
@@ -190,16 +218,19 @@ body {
     margin-bottom: 15px;
 }
 
-.level-title {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-bottom: 5px;
+/* أضف هذه القواعد الجديدة في النهاية */
+.level-title,
+.strategy-title,
+.strength-label {
+    font-family: var(--font-arabic);
 }
 
+/* ابحث عن .level-value وعدّله */
 .level-value {
     font-size: 1.1rem;
     font-weight: bold;
     color: var(--text-light);
+    font-family: var(--font-numbers); /* إضافة هذا السطر */
 }
 
 .resistance {
@@ -229,16 +260,26 @@ body {
     color: var(--text-muted);
 }
 
+/* تحسين مؤشرات القوة */
 .strength-value {
     padding: 3px 8px;
     border-radius: 12px;
     font-size: 0.8rem;
     font-weight: bold;
+    font-family: var(--font-arabic);
+    text-transform: uppercase;
 }
 
 .strength-strong {
     background: rgba(0, 200, 83, 0.2);
     color: var(--success-color);
+}
+/* تحسين النسبة الذهبية */
+.level-value.golden,
+.next-target {
+    color: var(--secondary-color);
+    font-family: var(--font-numbers);
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
 }
 
 .strength-medium {
@@ -270,7 +311,9 @@ body {
     font-size: 0.85rem;
     color: var(--text-light);
     line-height: 1.4;
+    font-family: var(--font-arabic); /* إضافة هذا السطر */
 }
+
 
 .error-message {
     text-align: center;
