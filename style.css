@@ -62,7 +62,39 @@ body {
     font-family: var(--font-arabic);
     font-weight: 700;
 }
+/* تصميم اسم الموقع */
+.header h1 {
+    display: flex;
+    justify-content: flex-end; /* محاذاة لليمين */
+    align-items: center;
+    gap: 15px;
+    font-size: 3rem; /* خط كبير */
+    margin-bottom: 15px;
+    font-family: var(--font-english);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
 
+/* كلمة CRYPTO - لون سماوي */
+.header h1 .crypto-text {
+    color: var(--primary-color); /* #00ccff */
+    text-shadow: 
+        0 0 20px rgba(0, 204, 255, 0.5),
+        0 0 40px rgba(0, 204, 255, 0.3),
+        0 0 60px rgba(0, 204, 255, 0.2);
+    animation: glowCrypto 3s ease-in-out infinite alternate;
+}
+
+/* كلمة YASER - لون ذهبي */
+.header h1 .yaser-text {
+    color: var(--secondary-color); /* #ffd700 */
+    text-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.5),
+        0 0 40px rgba(255, 215, 0, 0.3),
+        0 0 60px rgba(255, 215, 0, 0.2);
+    animation: glowYaser 3s ease-in-out infinite alternate;
+}
 .update-info {
     display: flex;
     justify-content: center;
