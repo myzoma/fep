@@ -360,3 +360,81 @@ body {
         text-align: center;
     }
 }
+/* تحسينات بصرية إضافية */
+.fibonacci-levels {
+    margin-bottom: 20px;
+}
+
+.level-group {
+    margin-bottom: 15px;
+    padding: 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s ease;
+}
+
+.level-group:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(3px);
+}
+
+.level-group.golden-level {
+    border-left: 3px solid var(--secondary-color);
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.level-group.golden-level:hover {
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+/* تحسين العناوين */
+.header h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
+    font-family: var(--font-arabic);
+    font-weight: 700;
+}
+
+/* تحسين معلومات التحديث */
+.update-info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-family: var(--font-arabic);
+}
+
+.update-interval {
+    color: var(--secondary-color);
+    font-family: var(--font-numbers);
+    font-weight: 500;
+}
+
+/* تحسين مؤشر البيانات المباشرة */
+.data-source {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--bg-card);
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    font-family: var(--font-arabic);
+}
+
+.data-source::before {
+    content: "🔴 ";
+    color: var(--success-color);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
