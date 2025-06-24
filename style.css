@@ -62,39 +62,72 @@ body {
     font-family: var(--font-arabic);
     font-weight: 700;
 }
-/* تصميم اسم الموقع */
-.header h1 {
+/* تصميم الهيدر */
+.header {
     display: flex;
-    justify-content: flex-end; /* محاذاة لليمين */
+    justify-content: space-between;
     align-items: center;
-    gap: 15px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(0, 204, 255, 0.1), rgba(255, 215, 0, 0.1));
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* تصميم اسم الموقع */
+.header .fas.fa-coins,
+.header .yaser,
+.header .crypto {
     font-size: 3rem; /* خط كبير */
-    margin-bottom: 15px;
     font-family: var(--font-english);
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
+    display: inline-block;
+    margin: 0 8px;
+}
+
+/* أيقونة العملة */
+.header .fas.fa-coins {
+    color: var(--secondary-color);
+    font-size: 2.5rem;
+    margin-left: 15px;
+    animation: coinSpin 4s linear infinite;
 }
 
 /* كلمة CRYPTO - لون سماوي */
-.header h1 .crypto-text {
+.header .yaser {
     color: var(--primary-color); /* #00ccff */
     text-shadow: 
-        0 0 20px rgba(0, 204, 255, 0.5),
-        0 0 40px rgba(0, 204, 255, 0.3),
+        0 0 20px rgba(0, 204, 255, 0.6),
+        0 0 40px rgba(0, 204, 255, 0.4),
         0 0 60px rgba(0, 204, 255, 0.2);
     animation: glowCrypto 3s ease-in-out infinite alternate;
 }
 
 /* كلمة YASER - لون ذهبي */
-.header h1 .yaser-text {
+.header .crypto {
     color: var(--secondary-color); /* #ffd700 */
     text-shadow: 
-        0 0 20px rgba(255, 215, 0, 0.5),
-        0 0 40px rgba(255, 215, 0, 0.3),
+        0 0 20px rgba(255, 215, 0, 0.6),
+        0 0 40px rgba(255, 215, 0, 0.4),
         0 0 60px rgba(255, 215, 0, 0.2);
     animation: glowYaser 3s ease-in-out infinite alternate;
 }
+
+/* تجميع العنوان */
+.header .fas.fa-coins,
+.header .yaser,
+.header .crypto {
+    order: 1; /* يضعهم في اليسار */
+}
+
+.header .update-info {
+    order: 2; /* معلومات التحديث في اليمين */
+}
+
 .update-info {
     display: flex;
     justify-content: center;
