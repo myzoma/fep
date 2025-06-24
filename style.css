@@ -1,351 +1,285 @@
 :root {
-    --primary-color: #00ccff;
-    --secondary-color: #ffd700;
-    --accent-color: #e74c3c;
-    --bg-dark: #121212;
-    --bg-darker: #0a0a0a;
-    --bg-card: #252525;
-    --text-light: #e0e0e0;
-    --text-muted: #a0aec0;
-    --success-color: #00c853;
-    --danger-color: #ff3547;
-    --info-color: #00bcd4;
-    --empty-bg: #222b;
+    /* متغيرات الخطوط */
+    --font-arabic: 'Cairo', 'Noto Sans Arabic', 'Tajawal', sans-serif;
+    --font-numbers: 'JetBrains Mono', 'Roboto Mono', 'Source Code Pro', monospace;
+    --font-english: 'Inter', 'Roboto', 'Segoe UI', sans-serif;
+    
+    /* أحجام الخطوط */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    
+    /* أوزان الخطوط */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
 }
 
+/* الخط الأساسي للصفحة */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    font-family: var(--font-arabic);
+    font-weight: var(--font-weight-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
-    color: var(--text-light);
-    min-height: 100vh;
-    direction: rtl;
+/* العناوين الرئيسية */
+h1, h2, h3, .main-title {
+    font-family: var(--font-arabic);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.025em;
+    line-height: 1.2;
 }
 
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.header {
+.main-title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    background: linear-gradient(135deg, #00d4ff, #ff6b6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     text-align: center;
-    margin-bottom: 30px;
-    padding: 20px;
-    background: var(--bg-card);
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    margin-bottom: 2rem;
 }
 
-.header h1 {
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    text-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
-}
-
-.update-info {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.update-interval {
-    color: var(--secondary-color);
-}
-
-.loading {
-    text-align: center;
-    padding: 50px;
-}
-
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid var(--bg-card);
-    border-top: 4px solid var(--primary-color);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 20px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
-    min-height: 200px;
-}
-
-.empty-message {
-    grid-column: 1/-1;
-    background: var(--empty-bg);
-    color: var(--text-muted);
-    padding: 40px 10px;
-    border-radius: 15px;
-    font-size: 1.1rem;
-    text-align: center;
-    margin: 30px 0;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-}
-
-@media (min-width: 768px) {
-    .grid-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 1200px) {
-    .grid-container {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-.crypto-card {
-    background: var(--bg-card);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.crypto-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-}
-
-.crypto-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
+/* أسماء العملات */
 .crypto-name {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: var(--primary-color);
+    font-family: var(--font-english);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.trend-indicator {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
-}
-
-.trend-up {
-    background: rgba(0, 200, 83, 0.2);
-    color: var(--success-color);
-    border: 1px solid var(--success-color);
-}
-
-.trend-down {
-    background: rgba(255, 53, 71, 0.2);
-    color: var(--danger-color);
-    border: 1px solid var(--danger-color);
-}
-
-.price-section {
-    margin-bottom: 20px;
+/* الأسعار والأرقام */
+.current-price,
+.level-value,
+.price-change,
+.mathematical-details,
+.fibonacci-sequence {
+    font-family: var(--font-numbers) !important;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.025em;
 }
 
 .current-price {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: var(--text-light);
-    margin-bottom: 5px;
-}
-
-.price-change {
-    font-size: 1rem;
-    font-weight: bold;
-}
-
-.positive {
-    color: var(--success-color);
-}
-
-.negative {
-    color: var(--danger-color);
-}
-
-.fibonacci-levels {
-    margin-bottom: 20px;
-}
-
-.level-group {
-    margin-bottom: 15px;
-}
-
-.level-title {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-bottom: 5px;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: #00d4ff;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    margin: 0.5rem 0;
 }
 
 .level-value {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--text-light);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: #ffffff;
 }
 
-.resistance {
-    color: var(--danger-color);
+.level-value.golden {
+    color: #ffd700;
+    font-weight: var(--font-weight-bold);
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
 }
 
-.support {
-    color: var(--success-color);
+.level-value.resistance {
+    color: #ff6b6b;
+    font-weight: var(--font-weight-semibold);
 }
 
-.next-target {
-    color: var(--secondary-color);
+.level-value.support {
+    color: #4ecdc4;
+    font-weight: var(--font-weight-semibold);
 }
 
-.strength-indicator {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 15px;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-}
-
+/* النصوص العربية */
+.level-title,
+.strategy-title,
+.fib-header,
 .strength-label {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
-.strength-value {
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: bold;
-}
-
-.strength-strong {
-    background: rgba(0, 200, 83, 0.2);
-    color: var(--success-color);
-}
-
-.strength-medium {
-    background: rgba(255, 215, 0, 0.2);
-    color: var(--secondary-color);
-}
-
-.strength-weak {
-    background: rgba(255, 53, 71, 0.2);
-    color: var(--danger-color);
-}
-
-.strategy-section {
-    margin-top: 15px;
-    padding: 12px;
-    background: rgba(0, 204, 255, 0.1);
-    border-radius: 8px;
-    border-left: 3px solid var(--primary-color);
-}
-
-.strategy-title {
-    font-size: 0.9rem;
-    color: var(--primary-color);
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.strategy-text {
-    font-size: 0.85rem;
-    color: var(--text-light);
+    font-family: var(--font-arabic);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    color: #cccccc;
     line-height: 1.4;
 }
 
-.error-message {
+.strategy-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.fib-header {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: #00d4ff;
     text-align: center;
-    padding: 30px;
-    background: var(--bg-card);
-    border-radius: 15px;
-    color: var(--danger-color);
-    margin: 20px 0;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+    padding-bottom: 0.5rem;
 }
 
-.data-source {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--bg-card);
-    padding: 10px 15px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    z-index: 100;
+/* التفاصيل الرياضية */
+.mathematical-details {
+    font-size: var(--font-size-xs);
+    line-height: 1.6;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 3px solid #ffd700;
+    margin: 1rem 0;
 }
 
-.footer {
-    margin-top: 32px;
+.math-formula {
+    font-family: var(--font-numbers);
+    color: #ffd700;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 0.5rem;
+}
+
+/* متتالية فيبوناتشي */
+.fibonacci-sequence {
+    font-size: var(--font-size-xs);
+    color: #888888;
     text-align: center;
-    color: #888;
-    font-size: 0.9em;
-    background: var(--bg-card);
-    padding: 18px 10px 10px 10px;
-    border-radius: 10px;
-    letter-spacing: 0.5px;
+    padding: 0.5rem;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 4px;
+    margin-top: 1rem;
+    font-weight: var(--font-weight-medium);
 }
 
+/* مؤشرات القوة */
+.strength-value {
+    font-family: var(--font-arabic);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-sm);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.strength-very-strong {
+    background: linear-gradient(135deg, #00ff00, #32cd32);
+    color: #000000;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+}
+
+.strength-strong {
+    background: linear-gradient(135deg, #32cd32, #90ee90);
+    color: #000000;
+}
+
+.strength-medium {
+    background: linear-gradient(135deg, #ffa500, #ffff00);
+    color: #000000;
+}
+
+.strength-weak {
+    background: linear-gradient(135deg, #ff6b6b, #ff4444);
+    color: #ffffff;
+}
+
+/* التحسينات البصرية */
+.crypto-card {
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* مؤشر البيانات المباشرة */
+.live-data {
+    font-family: var(--font-arabic);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+}
+
+.live-indicator {
+    font-weight: var(--font-weight-semibold);
+    color: #00ff00;
+}
+
+/* التحسينات للشاشات الصغيرة */
 @media (max-width: 768px) {
-    .container {
-        padding: 10px;
+    .main-title {
+        font-size: var(--font-size-2xl);
     }
+    
+    .crypto-name {
+        font-size: var(--font-size-lg);
+    }
+    
+    .current-price {
+        font-size: var(--font-size-xl);
+    }
+    
+    .mathematical-details {
+        font-size: 0.7rem;
+        padding: 0.75rem;
+    }
+}
 
-    .header h1 {
-        font-size: 2rem;
+/* تحسين الخطوط للطباعة */
+@media print {
+    * {
+        font-family: 'Times New Roman', serif !important;
+        color: #000000 !important;
+        background: transparent !important;
     }
+}
 
-    .update-info {
-        flex-direction: column;
-        gap: 5px;
-    }
+/* تحسينات إضافية للوضوح */
+.level-group {
+    margin: 0.75rem 0;
+    padding: 0.5rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
 
-    .crypto-card {
-        padding: 15px;
-    }
+.level-group:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
 
-    .empty-message {
-        font-size: 1rem;
-        padding: 20px 5px;
-    }
+.golden-level {
+    border-left: 3px solid #ffd700;
+    background: rgba(255, 215, 0, 0.1);
+}
 
-    .data-source {
-        position: static;
-        margin-top: 20px;
-        text-align: center;
-    }
+.golden-level:hover {
+    background: rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+/* تحسين النصوص الطويلة */
+.strategy-text {
+    font-family: var(--font-arabic);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    color: #e0e0e0;
+    margin: 0.5rem 0;
+}
+
+.mathematical-basis {
+    font-family: var(--font-numbers);
+    font-size: var(--font-size-xs);
+    color: #ffd700;
+    font-style: italic;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 215, 0, 0.3);
 }
