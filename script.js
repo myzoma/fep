@@ -292,34 +292,49 @@ class FibonacciCryptoTracker {
         return `${percentage}%`;
     }
 
-    calculateGoldenRatioStrength(currentPrice, fibLevels) {
-        // حساب القوة بناءً على القرب من النسبة الذهبية الحقيقية
-        const goldenLevel = fibLevels.goldenRatioLevel;
-        if (!goldenLevel) return 'ضعيف';
+   // استبدل الدالة الحالية بهذه
+calculateGoldenRatioStrength(currentPrice, fibLevels) {
+    // جمع كل المستويات المهمة
+    const importantLevels = [];
+    
+    // مستويات الارتداد
+    Object.entries(fibLevels.retracementLevels).forEach(([key, value]) => {
+        if (value && (key.includes('61.8') || key.includes('38.2') || key.includes('78.6'))) {
+            importantLevels.push({ name: key, value, type: 'retracement' });
+        }
+    });
+    
+    // مستويات التمديد
+    Object.entries(fibLevels.extensionLevels).forEach(([key, value]) => {
+        if (value && (key.includes('161.8') || key.includes('261.8'))) {
+            importantLevels.push({ name: key, value, type: 'extension' });
+        }
+    });
+    
+    if (importantLevels.length === 0) return 'غير محدد';
+    
+    // حساب أقرب مستوى
+    let closestLevel = null;
+    let minDistance = Infinity;
+    
+    importantLevels.forEach(level => {
+        const distance = Math.abs(currentPrice - level.value) / currentPrice;
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestLevel = level;
+        }
+    });
+    
+    // تسجيل للتتبع
+    console.log(`${fibLevels.symbol || 'Unknown'}: أقرب مستوى ${closestLevel.name} على بُعد ${(minDistance * 100).toFixed(2)}%`);
+    
+    // تحديد القوة
+    if (minDistance < 0.01) return 'قوي جداً';
+    if (minDistance < 0.025) return 'قوي';
+    if (minDistance < 0.05) return 'متوسط';
+    return 'ضعيف';
+}
 
-        const distanceToGolden = Math.abs(currentPrice - goldenLevel) / currentPrice;
-        
-        // النسبة الذهبية هي أقوى مستويات فيبوناتشي
-        if (distanceToGolden < 0.005) return 'قوي جداً'; // ضمن 0.5%
-        if (distanceToGolden < 0.01) return 'قوي'; // ضمن 1%
-        if (distanceToGolden < 0.025) return 'متوسط'; // ضمن 2.5%
-        
-        // فحص القرب من مستويات فيبوناتشي الأخرى المهمة
-        const importantLevels = [
-            fibLevels.retracementLevels['38.2%'],
-            fibLevels.retracementLevels['78.6%'],
-            fibLevels.extensionLevels['161.8% (النسبة الذهبية)']
-        ].filter(level => level !== undefined);
-
-        let minDistance = Infinity;
-        importantLevels.forEach(level => {
-            const distance = Math.abs(currentPrice - level) / currentPrice;
-            minDistance = Math.min(minDistance, distance);
-        });
-
-        if (minDistance < 0.015) return 'متوسط';
-        return 'ضعيف';
-    }
 
     generateMathematicalFibonacciStrategy(currentPrice, fibLevels, isUpTrend) {
         const resistanceDistance = Math.abs(currentPrice - fibLevels.resistance) / currentPrice;
