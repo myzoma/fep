@@ -538,22 +538,7 @@ body {
     }
 }
 
-/* إضافة أيقونة للقوة */
-.strength-value.قوي::before,
-.strength-value.قوي-جداً::before {
-    content: '🚀 ';
-    margin-left: 5px;
-}
 
-.strength-value.متوسط::before {
-    content: '⚡ ';
-    margin-left: 5px;
-}
-
-.strength-value.ضعيف::before {
-    content: '⚠️ ';
-    margin-left: 5px;
-}
 
 /* تحسين للشاشات الصغيرة */
 @media (max-width: 768px) {
