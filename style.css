@@ -1,4 +1,15 @@
 :root {
+      --primary-color: #00ccff;
+      --secondary-color: #ffd700;
+      --accent-color: #e74c3c;
+      --bg-dark: #121212;
+      --bg-darker: #0a0a0a;
+      --bg-card: #252525;
+      --text-light: #e0e0e0;
+      --text-muted: #a0aec0;
+      --success-color: #00c853;
+      --danger-color: #ff3547;
+      --info-color: #00bcd4;
     /* متغيرات الخطوط */
     --font-arabic: 'Cairo', 'Noto Sans Arabic', 'Tajawal', sans-serif;
     --font-numbers: 'JetBrains Mono', 'Roboto Mono', 'Source Code Pro', monospace;
