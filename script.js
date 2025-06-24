@@ -554,7 +554,7 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
     // دالة لعرض تفاصيل النسب الرياضية
     getMathematicalProof() {
         return {
-            goldenRatio: this.GOLDEN_RATIO,
+           
             calculation: "(1 + √5) / 2",
             properties: {
                 "φ² = φ + 1": `${(this.GOLDEN_RATIO * this.GOLDEN_RATIO).toFixed(9)} = ${(this.GOLDEN_RATIO + 1).toFixed(9)}`,
