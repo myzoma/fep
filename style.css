@@ -472,3 +472,162 @@ body {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
 }
+/* ========== تحسين قوة النسبة الذهبية ========== */
+
+/* العنوان الرئيسي */
+.golden-ratio-strength,
+.strength-section,
+.ratio-strength {
+    margin: 15px 0;
+    padding: 0;
+}
+
+.golden-ratio-strength h4,
+.strength-section h4,
+.ratio-strength h4 {
+    color: var(--secondary-color);
+    font-family: var(--font-arabic);
+    font-size: 1rem;
+    margin-bottom: 8px;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+/* مؤشرات القوة */
+.strength-value,
+.golden-strength,
+.ratio-value {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: var(--font-arabic);
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    min-width: 80px;
+    margin: 5px 0;
+    border: 2px solid;
+    position: relative;
+    overflow: hidden;
+}
+
+/* قوي جداً */
+.strength-value.قوي,
+.strength-value.قوي-جداً,
+.strength-value:contains("قوي"),
+.golden-strength.قوي,
+.golden-strength.قوي-جداً,
+.ratio-value.strong {
+    background: linear-gradient(135deg, rgba(0, 200, 83, 0.3), rgba(0, 255, 100, 0.2));
+    color: #00ff64;
+    border-color: #00c853;
+    box-shadow: 
+        0 0 15px rgba(0, 200, 83, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 8px rgba(0, 255, 100, 0.6);
+}
+
+/* متوسط */
+.strength-value.متوسط,
+.golden-strength.متوسط,
+.ratio-value.medium {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 235, 59, 0.2));
+    color: #ffd700;
+    border-color: #ffc107;
+    box-shadow: 
+        0 0 15px rgba(255, 215, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+/* ضعيف */
+.strength-value.ضعيف,
+.golden-strength.ضعيف,
+.ratio-value.weak {
+    background: linear-gradient(135deg, rgba(255, 53, 71, 0.3), rgba(255, 82, 82, 0.2));
+    color: #ff5252;
+    border-color: #f44336;
+    box-shadow: 
+        0 0 15px rgba(255, 53, 71, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 8px rgba(255, 53, 71, 0.6);
+}
+
+/* تأثير التمرير */
+.strength-value:hover,
+.golden-strength:hover,
+.ratio-value:hover {
+    transform: translateY(-2px) scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.strength-value.قوي:hover,
+.strength-value.قوي-جداً:hover {
+    box-shadow: 
+        0 4px 20px rgba(0, 200, 83, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, rgba(0, 200, 83, 0.4), rgba(0, 255, 100, 0.3));
+}
+
+/* تأثير النبض للقوي جداً */
+.strength-value.قوي,
+.strength-value.قوي-جداً {
+    animation: strongPulse 2s infinite;
+}
+
+@keyframes strongPulse {
+    0% { 
+        box-shadow: 0 0 15px rgba(0, 200, 83, 0.4);
+    }
+    50% { 
+        box-shadow: 0 0 25px rgba(0, 200, 83, 0.8);
+    }
+    100% { 
+        box-shadow: 0 0 15px rgba(0, 200, 83, 0.4);
+    }
+}
+
+/* إضافة أيقونة للقوة */
+.strength-value.قوي::before,
+.strength-value.قوي-جداً::before {
+    content: '🚀 ';
+    margin-left: 5px;
+}
+
+.strength-value.متوسط::before {
+    content: '⚡ ';
+    margin-left: 5px;
+}
+
+.strength-value.ضعيف::before {
+    content: '⚠️ ';
+    margin-left: 5px;
+}
+
+/* تحسين للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .strength-value,
+    .golden-strength,
+    .ratio-value {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        min-width: 70px;
+    }
+}
+
+/* إضافة خلفية متحركة للقوي جداً */
+.strength-value.قوي::after,
+.strength-value.قوي-جداً::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
