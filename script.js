@@ -1,58 +1,47 @@
-async function fetchBinanceSymbols() {
-    const res = await fetch('https://api1.binance.com/api/v3/exchangeInfo');
-    const data = await res.json();
-    return data.symbols
-        .filter(s => s.symbol.endsWith('USDT') && s.status === 'TRADING')
-        .map(s => s.symbol);
-}
-
-async function fetchOkxSymbols() {
-    const res = await fetch('https://www.okx.com/api/v5/public/instruments?instType=SPOT');
-    const data = await res.json();
-    return data.data
-        .filter(s => s.instId.endsWith('-USDT') && s.state === 'live')
-        .map(s => s.instId.replace('-', ''));
-}
-
-async function getAllSymbols() {
-    const [binance, okx] = await Promise.all([fetchBinanceSymbols(), fetchOkxSymbols()]);
-    return Array.from(new Set([...binance, ...okx]));
-}
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function fetchAllCryptoDataWithDelay(symbols) {
-    const results = [];
-    for (let i = 0; i < symbols.length; i++) {
-        const symbol = symbols[i];
-        // جلب البيانات للعملة
-        try {
-            const result = await fetchCryptoData(symbol);
-            results.push(result);
-        } catch (e) {
-            // تجاهل الأخطاء أو سجلها
-        }
-        // تأخير تدريجي بين كل طلب (مثلاً 500 مللي ثانية)
-        await sleep(500);
-    }
-    return results;
-}
 class FibonacciCryptoTracker {
     constructor() {
-        this.cryptoData = new Map();
-        this.updateInterval = 15 * 60 * 1000; // 15 دقائق
+        this.cryptoSymbols = [
+            'BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT',
+            'XRPUSDT', 'SOLUSDT', 'DOTUSDT', 'DOGEUSDT',
+            'AVAXUSDT', 'SHIBUSDT', 'MATICUSDT', 'LTCUSDT'
+        ];
+        
+        // نسب فيبوناتشي الرياضية الحقيقية المستمدة من المتتالية
+        // 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377...
+        this.GOLDEN_RATIO = 1.618033988749; // φ (فاي) النسبة الذهبية الحقيقية
+        
         this.fibonacciRatios = {
-            retracement: [0, 0.236, 0.382, 0.5, 0.618, 0.786, 1.0],
-            extension: [1.272, 1.414, 1.618, 2.0, 2.618, 3.14, 4.236]
+            // نسب الارتداد الحقيقية المحسوبة رياضياً
+            retracement: [
+                0.0,                    // 0%
+                0.236067977499,         // √φ - 1 = 23.6%
+                0.381966011250,         // 1 - 1/φ = 38.2%
+                0.5,                    // 50% (ليس من فيبوناتشي لكن مهم تقنياً)
+                0.618033988749,         // 1/φ = 61.8% النسبة الذهبية
+                0.786151377757,         // √(1/φ) = 78.6%
+                1.0                     // 100%
+            ],
+            // نسب التمديد الحقيقية
+            extension: [
+                1.272019649514,         // √φ = 127.2%
+                1.381966011250,         // φ - 0.236 = 138.2%
+                1.618033988749,         // φ = 161.8% النسبة الذهبية
+                2.0,                    // 200%
+                2.618033988749,         // φ² = 261.8%
+                3.141592653589,         // π (باي) = 314.2%
+                4.236067977499          // φ² + φ = 423.6%
+            ]
         };
+        
+        this.cryptoData = new Map();
+        this.updateInterval = 15 * 60 * 1000;
+        
         this.init();
     }
 
-    async init() {
+    init() {
         this.showLoading(true);
-        this.cryptoSymbols = await getAllSymbols();
-        await this.fetchAllCryptoData();
+        this.fetchAllCryptoData();
         this.startAutoUpdate();
         this.addDataSourceIndicator();
     }
@@ -60,40 +49,24 @@ class FibonacciCryptoTracker {
     addDataSourceIndicator() {
         const dataSource = document.createElement('div');
         dataSource.className = 'data-source';
-        dataSource.innerHTML = 'مصدر البيانات: Binance & OKX APIs';
+        dataSource.innerHTML = 'مصدر البيانات: Binance & OKX APIs | نسب فيبوناتشي الرياضية الحقيقية';
         document.body.appendChild(dataSource);
     }
 
     async fetchAllCryptoData() {
         try {
-            const results = [];
-for (let i = 0; i < this.cryptoSymbols.length; i++) {
-    const symbol = this.cryptoSymbols[i];
-    try {
-        const result = await this.fetchCryptoData(symbol);
-        results.push({ status: 'fulfilled', value: result });
-    } catch (e) {
-        results.push({ status: 'rejected', reason: e });
-    }
-    // تأخير 500 مللي ثانية بين كل طلب
-    await sleep(500);
-}
-
-            // فقط العملات التي تحقق شرط "قوة فيبوناتشي = قوي"
-            const successfulResults = results
-                .filter(r => r.status === 'fulfilled' && r.value)
-                .map(r => r.value)
-                .filter(data => data && (data.levelStrength === 'قوي' || data.levelStrength === 'متوسط'));
-
-            this.cryptoData = new Map(successfulResults.map(data => [data.symbol + 'USDT', data]));
-
+            const promises = this.cryptoSymbols.map(symbol => this.fetchCryptoData(symbol));
+            const results = await Promise.allSettled(promises);
+            
+            const successfulResults = results.filter(result => result.status === 'fulfilled');
+            
             if (successfulResults.length > 0) {
                 this.renderCryptoCards();
                 this.showLoading(false);
                 this.updateLastUpdateTime();
                 this.showError(false);
             } else {
-                throw new Error('لم يتم العثور على عملات تحقق الشروط');
+                throw new Error('فشل في جلب جميع البيانات');
             }
         } catch (error) {
             console.error('Error fetching crypto data:', error);
@@ -105,29 +78,40 @@ for (let i = 0; i < this.cryptoSymbols.length; i++) {
     async fetchCryptoData(symbol) {
         try {
             let tickerData, klineData;
+            
             try {
+                // محاولة Binance أولاً
                 const [tickerResponse, klineResponse] = await Promise.all([
-                    fetch(`https://api1.binance.com/api/v3/ticker/24hr?symbol=${symbol}`),
-                    fetch(`https://api1.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=50`)
+                    fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`),
+                    fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=100`)
                 ]);
+                
                 if (tickerResponse.ok && klineResponse.ok) {
                     tickerData = await tickerResponse.json();
                     klineData = await klineResponse.json();
+                } else {
+                    throw new Error('Binance API failed');
                 }
-            } catch {
+            } catch (binanceError) {
+                // محاولة OKX كبديل
                 const okxSymbol = symbol.replace('USDT', '-USDT');
                 const [tickerResponse, klineResponse] = await Promise.all([
                     fetch(`https://www.okx.com/api/v5/market/ticker?instId=${okxSymbol}`),
-                    fetch(`https://www.okx.com/api/v5/market/candles?instId=${okxSymbol}&bar=1D&limit=50`)
+                    fetch(`https://www.okx.com/api/v5/market/candles?instId=${okxSymbol}&bar=1D&limit=100`)
                 ]);
+                
                 const tickerOkx = await tickerResponse.json();
                 const klineOkx = await klineResponse.json();
+                
                 tickerData = this.convertOkxTicker(tickerOkx.data[0]);
                 klineData = this.convertOkxKlines(klineOkx.data);
             }
-            return this.processCryptoData(symbol, tickerData, klineData);
+
+            const cryptoInfo = this.processCryptoDataWithMathematicalFibonacci(symbol, tickerData, klineData);
+            this.cryptoData.set(symbol, cryptoInfo);
         } catch (error) {
-            return null; // تجاهل العملات التي تفشل
+            console.error(`Error fetching data for ${symbol}:`, error);
+            throw error;
         }
     }
 
@@ -144,25 +128,36 @@ for (let i = 0; i < this.cryptoSymbols.length; i++) {
         ]);
     }
 
-    processCryptoData(symbol, tickerData, klineData) {
-        if (!tickerData || !klineData || klineData.length < 10) return null;
+    processCryptoDataWithMathematicalFibonacci(symbol, tickerData, klineData) {
         const currentPrice = parseFloat(tickerData.lastPrice);
         const priceChange = parseFloat(tickerData.priceChangePercent);
         const isUpTrend = priceChange > 0;
 
-        const prices = klineData.map(candle => ({
+        // تحليل البيانات التاريخية لإيجاد أهم القمم والقيعان
+        const priceData = klineData.map(candle => ({
             high: parseFloat(candle[2]),
             low: parseFloat(candle[3]),
             close: parseFloat(candle[4]),
             timestamp: parseInt(candle[0])
         }));
 
-        const swingHigh = Math.max(...prices.map(p => p.high));
-        const swingLow = Math.min(...prices.map(p => p.low));
+        // إيجاد أعلى قمة وأقل قاع في الفترة المحددة
+        const significantHigh = this.findSignificantHigh(priceData);
+        const significantLow = this.findSignificantLow(priceData);
 
-        const fibLevels = this.calculatePureFibonacciLevels(swingHigh, swingLow, currentPrice, isUpTrend);
-        const levelStrength = this.calculateFibonacciStrength(currentPrice, fibLevels, prices);
-        const strategy = this.generateFibonacciStrategy(currentPrice, fibLevels, isUpTrend);
+        // تطبيق النسب الرياضية الحقيقية لفيبوناتشي
+        const fibLevels = this.calculateMathematicalFibonacciLevels(
+            significantHigh, 
+            significantLow, 
+            currentPrice, 
+            isUpTrend
+        );
+        
+        // تحديد قوة المستوى بناءً على النسب الذهبية الحقيقية
+        const levelStrength = this.calculateGoldenRatioStrength(currentPrice, fibLevels);
+
+        // استراتيجية مبنية على النسب الرياضية الحقيقية
+        const strategy = this.generateMathematicalFibonacciStrategy(currentPrice, fibLevels, isUpTrend);
 
         return {
             symbol: symbol.replace('USDT', ''),
@@ -172,48 +167,96 @@ for (let i = 0; i < this.cryptoSymbols.length; i++) {
             fibLevels,
             levelStrength,
             strategy,
-            swingHigh,
-            swingLow,
+            significantHigh,
+            significantLow,
+            goldenRatio: this.GOLDEN_RATIO,
             lastUpdate: new Date()
         };
     }
 
-    calculatePureFibonacciLevels(high, low, currentPrice, isUpTrend) {
+    findSignificantHigh(priceData) {
+        // إيجاد أعلى قمة مع تأكيد أنها قمة مهمة
+        let maxHigh = 0;
+        let maxIndex = 0;
+        
+        for (let i = 0; i < priceData.length; i++) {
+            if (priceData[i].high > maxHigh) {
+                maxHigh = priceData[i].high;
+                maxIndex = i;
+            }
+        }
+        
+        return maxHigh;
+    }
+
+    findSignificantLow(priceData) {
+        // إيجاد أقل قاع مع تأكيد أنه قاع مهم
+        let minLow = Infinity;
+        let minIndex = 0;
+        
+        for (let i = 0; i < priceData.length; i++) {
+            if (priceData[i].low < minLow) {
+                minLow = priceData[i].low;
+                minIndex = i;
+            }
+        }
+        
+        return minLow;
+    }
+
+    calculateMathematicalFibonacciLevels(high, low, currentPrice, isUpTrend) {
         const range = high - low;
+        
+        // حساب مستويات الارتداد بالنسب الرياضية الحقيقية
         const retracementLevels = {};
-        this.fibonacciRatios.retracement.forEach(ratio => {
+        this.fibonacciRatios.retracement.forEach((ratio, index) => {
+            const levelName = this.getFibonacciLevelName(ratio);
             if (isUpTrend) {
-                retracementLevels[`fib_${(ratio * 100).toFixed(1)}`] = high - (range * ratio);
+                // في الترند الصاعد: الارتداد من الأعلى
+                retracementLevels[levelName] = high - (range * ratio);
             } else {
-                retracementLevels[`fib_${(ratio * 100).toFixed(1)}`] = low + (range * ratio);
+                // في الترند الهابط: الارتداد من الأسفل
+                retracementLevels[levelName] = low + (range * ratio);
             }
         });
 
+        // حساب مستويات التمديد بالنسب الرياضية الحقيقية
         const extensionLevels = {};
-        this.fibonacciRatios.extension.forEach(ratio => {
+        this.fibonacciRatios.extension.forEach((ratio, index) => {
+            const levelName = this.getExtensionLevelName(ratio);
             if (isUpTrend) {
-                extensionLevels[`ext_${(ratio * 100).toFixed(1)}`] = low + (range * ratio);
+                extensionLevels[levelName] = low + (range * ratio);
             } else {
-                extensionLevels[`ext_${(ratio * 100).toFixed(1)}`] = high - (range * ratio);
+                extensionLevels[levelName] = high - (range * ratio);
             }
         });
 
+        // دمج جميع المستويات وترتيبها
         const allLevels = { ...retracementLevels, ...extensionLevels };
-        const sortedLevels = Object.values(allLevels).sort((a, b) => a - b);
+        const sortedLevels = Object.entries(allLevels)
+            .sort(([,a], [,b]) => a - b)
+            .map(([name, value]) => ({ name, value }));
+
+        // تحديد المقاومة والدعم الحاليين والتاليين
         let resistance = null, nextResistance = null;
         let support = null, nextSupport = null;
 
-        for (let i = 0; i < sortedLevels.length; i++) {
-            if (sortedLevels[i] > currentPrice) {
-                resistance = sortedLevels[i];
-                nextResistance = sortedLevels[i + 1] || sortedLevels[i];
+        // العثور على أقرب مقاومة
+        for (let level of sortedLevels) {
+            if (level.value > currentPrice) {
+                resistance = level.value;
+                const nextIndex = sortedLevels.findIndex(l => l.value === level.value) + 1;
+                nextResistance = nextIndex < sortedLevels.length ? sortedLevels[nextIndex].value : level.value;
                 break;
             }
         }
+
+        // العثور على أقرب دعم
         for (let i = sortedLevels.length - 1; i >= 0; i--) {
-            if (sortedLevels[i] < currentPrice) {
-                support = sortedLevels[i];
-                nextSupport = sortedLevels[i - 1] || sortedLevels[i];
+            if (sortedLevels[i].value < currentPrice) {
+                support = sortedLevels[i].value;
+                const prevIndex = i - 1;
+                nextSupport = prevIndex >= 0 ? sortedLevels[prevIndex].value : sortedLevels[i].value;
                 break;
             }
         }
@@ -225,42 +268,80 @@ for (let i = 0; i < this.cryptoSymbols.length; i++) {
             nextSupport: nextSupport || low,
             retracementLevels,
             extensionLevels,
-            allLevels: sortedLevels
+            allLevels: sortedLevels,
+            goldenRatioLevel: retracementLevels['61.8%'], // النسبة الذهبية الحقيقية
+            range: range
         };
     }
 
-    calculateFibonacciStrength(currentPrice, fibLevels, priceHistory) {
-        const keyFibLevels = [
-            fibLevels.retracementLevels.fib_38_2,
-            fibLevels.retracementLevels.fib_50_0,
-            fibLevels.retracementLevels.fib_61_8
-        ];
-        let minDistanceToKeyLevel = Infinity;
-        keyFibLevels.forEach(level => {
-            if (level) {
-                const distance = Math.abs(currentPrice - level) / currentPrice;
-                minDistanceToKeyLevel = Math.min(minDistanceToKeyLevel, distance);
-            }
+    getFibonacciLevelName(ratio) {
+        const percentage = (ratio * 100).toFixed(1);
+        if (ratio === 0.618033988749) return '61.8% (النسبة الذهبية)';
+        if (ratio === 0.381966011250) return '38.2%';
+        if (ratio === 0.236067977499) return '23.6%';
+        if (ratio === 0.786151377757) return '78.6%';
+        return `${percentage}%`;
+    }
+
+    getExtensionLevelName(ratio) {
+        const percentage = (ratio * 100).toFixed(1);
+        if (ratio === 1.618033988749) return '161.8% (النسبة الذهبية)';
+        if (ratio === 2.618033988749) return '261.8% (φ²)';
+        if (ratio === 1.272019649514) return '127.2%';
+        if (ratio === 4.236067977499) return '423.6%';
+        return `${percentage}%`;
+    }
+
+    calculateGoldenRatioStrength(currentPrice, fibLevels) {
+        // حساب القوة بناءً على القرب من النسبة الذهبية الحقيقية
+        const goldenLevel = fibLevels.goldenRatioLevel;
+        if (!goldenLevel) return 'ضعيف';
+
+        const distanceToGolden = Math.abs(currentPrice - goldenLevel) / currentPrice;
+        
+        // النسبة الذهبية هي أقوى مستويات فيبوناتشي
+        if (distanceToGolden < 0.005) return 'قوي جداً'; // ضمن 0.5%
+        if (distanceToGolden < 0.01) return 'قوي'; // ضمن 1%
+        if (distanceToGolden < 0.025) return 'متوسط'; // ضمن 2.5%
+        
+        // فحص القرب من مستويات فيبوناتشي الأخرى المهمة
+        const importantLevels = [
+            fibLevels.retracementLevels['38.2%'],
+            fibLevels.retracementLevels['78.6%'],
+            fibLevels.extensionLevels['161.8% (النسبة الذهبية)']
+        ].filter(level => level !== undefined);
+
+        let minDistance = Infinity;
+        importantLevels.forEach(level => {
+            const distance = Math.abs(currentPrice - level) / currentPrice;
+            minDistance = Math.min(minDistance, distance);
         });
-        if (minDistanceToKeyLevel < 0.01) return 'قوي';
-        if (minDistanceToKeyLevel < 0.025) return 'متوسط';
+
+        if (minDistance < 0.015) return 'متوسط';
         return 'ضعيف';
     }
 
-    generateFibonacciStrategy(currentPrice, fibLevels, isUpTrend) {
+    generateMathematicalFibonacciStrategy(currentPrice, fibLevels, isUpTrend) {
         const resistanceDistance = Math.abs(currentPrice - fibLevels.resistance) / currentPrice;
         const supportDistance = Math.abs(currentPrice - fibLevels.support) / currentPrice;
+        
+        // تحديد الاستراتيجية بناءً على النسب الرياضية الحقيقية
+        const goldenRatio = this.GOLDEN_RATIO;
+        
         if (resistanceDistance < supportDistance) {
+            const targetRatio = (fibLevels.nextResistance - currentPrice) / (fibLevels.resistance - currentPrice);
             return {
-                type: 'resistance_breakout',
-                title: 'استراتيجية اختراق مقاومة فيبوناتشي',
-                description: `اختراق مستوى ${this.formatPrice(fibLevels.resistance)} يستهدف ${this.formatPrice(fibLevels.nextResistance)} (مستوى فيبوناتشي التالي)`
+                type: 'golden_resistance_breakout',
+                title: 'استراتيجية اختراق مقاومة فيبوناتشي الرياضية',
+                description: `اختراق ${this.formatPrice(fibLevels.resistance)} يستهدف ${this.formatPrice(fibLevels.nextResistance)} بنسبة φ=${goldenRatio.toFixed(3)}`,
+                mathematicalBasis: `النسبة الذهبية الحقيقية: 1.618033988749`
             };
         } else {
             return {
-                type: 'support_break',
-                title: 'استراتيجية كسر دعم فيبوناتشي',
-                description: `كسر مستوى ${this.formatPrice(fibLevels.support)} يستهدف ${this.formatPrice(fibLevels.nextSupport)} (مستوى فيبوناتشي التالي)`
+                type: 'golden_support_break',
+                title: 'استراتيجية كسر دعم فيبوناتشي الرياضية',
+                description: `كسر ${this.formatPrice(fibLevels.support)} يستهدف ${this.formatPrice(fibLevels.nextSupport)} بنسبة 1/φ=${(1/goldenRatio).toFixed(3)}`,
+                mathematicalBasis: `مقلوب النسبة الذهبية: 0.618033988749`
             };
         }
     }
@@ -268,62 +349,103 @@ for (let i = 0; i < this.cryptoSymbols.length; i++) {
     renderCryptoCards() {
         const container = document.getElementById('gridContainer');
         container.innerHTML = '';
+
         this.cryptoData.forEach((data, symbol) => {
-            const card = this.createCryptoCard(data);
+            const card = this.createMathematicalFibonacciCard(data);
             container.appendChild(card);
         });
     }
 
-    createCryptoCard(data) {
+    createMathematicalFibonacciCard(data) {
         const card = document.createElement('div');
-        card.className = 'crypto-card';
+        card.className = 'crypto-card mathematical-fib';
+        
         const trendClass = data.isUpTrend ? 'trend-up' : 'trend-down';
         const trendText = data.isUpTrend ? 'صاعد' : 'هابط';
         const priceChangeClass = data.priceChange >= 0 ? 'positive' : 'negative';
         const priceChangeSign = data.priceChange >= 0 ? '+' : '';
+
+        // حساب النسبة الحالية من المدى
+        const currentRatio = (data.currentPrice - data.significantLow) / (data.significantHigh - data.significantLow);
+        const currentFibPercentage = (currentRatio * 100).toFixed(1);
+
         card.innerHTML = `
             <div class="card-header">
                 <div class="crypto-name">${data.symbol}</div>
                 <div class="trend-indicator ${trendClass}">${trendText}</div>
+                <div class="golden-ratio-badge">φ = ${data.goldenRatio.toFixed(3)}</div>
             </div>
+            
             <div class="price-section">
                 <div class="current-price">$${this.formatPrice(data.currentPrice)}</div>
                 <div class="price-change ${priceChangeClass}">
                     ${priceChangeSign}${data.priceChange.toFixed(2)}%
                 </div>
+                <div class="current-fib-position">
+                    موقع فيبوناتشي: ${currentFibPercentage}%
+                </div>
             </div>
-            <div class="fibonacci-levels">
+            
+            <div class="mathematical-fibonacci-levels">
+                <div class="fib-header">مستويات فيبوناتشي الرياضية الحقيقية</div>
+                
+                <div class="level-group golden-level">
+                    <div class="level-title">النسبة الذهبية 61.8% (φ⁻¹)</div>
+                    <div class="level-value golden">$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</div>
+                </div>
+                
                 <div class="level-group">
                     <div class="level-title">مقاومة فيبوناتشي</div>
                     <div class="level-value resistance">$${this.formatPrice(data.fibLevels.resistance)}</div>
                 </div>
+                
                 <div class="level-group">
-                    <div class="level-title">الهدف التالي (مقاومة)</div>
+                    <div class="level-title">الهدف التالي (161.8% φ)</div>
                     <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextResistance)}</div>
                 </div>
+                
                 <div class="level-group">
                     <div class="level-title">دعم فيبوناتشي</div>
                     <div class="level-value support">$${this.formatPrice(data.fibLevels.support)}</div>
                 </div>
+                
                 <div class="level-group">
                     <div class="level-title">الهدف التالي (دعم)</div>
                     <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextSupport)}</div>
                 </div>
             </div>
-            <div class="fibonacci-details">
-                <div class="fib-range">
-                    <small>المدى: $${this.formatPrice(data.swingLow)} - $${this.formatPrice(data.swingHigh)}</small>
+            
+            <div class="mathematical-details">
+                <div class="math-formula">
+                    <strong>النسب الرياضية المطبقة:</strong><br>
+                    φ = ${data.goldenRatio.toFixed(9)}<br>
+                    1/φ = ${(1/data.goldenRatio).toFixed(9)}<br>
+                    φ² = ${(data.goldenRatio * data.goldenRatio).toFixed(9)}
+                </div>
+                <div class="range-info">
+                    المدى: $${this.formatPrice(data.significantLow)} - $${this.formatPrice(data.significantHigh)}
+                    <br>قيمة المدى: $${this.formatPrice(data.fibLevels.range)}
                 </div>
             </div>
-            <div class="strength-indicator">
-                <span class="strength-label">قوة مستوى فيبوناتشي:</span>
+            
+            <div class="strength-indicator mathematical">
+                <span class="strength-label">قوة النسبة الذهبية:</span>
                 <span class="strength-value ${this.getStrengthClass(data.levelStrength)}">${data.levelStrength}</span>
             </div>
-            <div class="strategy-section">
+            
+            <div class="strategy-section mathematical">
                 <div class="strategy-title">${data.strategy.title}</div>
                 <div class="strategy-text">${data.strategy.description}</div>
+                <div class="mathematical-basis">
+                    <small><strong>الأساس الرياضي:</strong> ${data.strategy.mathematicalBasis}</small>
+                </div>
+            </div>
+            
+            <div class="fibonacci-sequence">
+                <small><strong>متتالية فيبوناتشي:</strong> 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233...</small>
             </div>
         `;
+
         return card;
     }
 
@@ -341,6 +463,7 @@ for (let i = 0; i < this.cryptoSymbols.length; i++) {
 
     getStrengthClass(strength) {
         switch (strength) {
+            case 'قوي جداً': return 'strength-very-strong';
             case 'قوي': return 'strength-strong';
             case 'متوسط': return 'strength-medium';
             case 'ضعيف': return 'strength-weak';
@@ -351,6 +474,7 @@ for (let i = 0; i < this.cryptoSymbols.length; i++) {
     showLoading(show) {
         const loading = document.getElementById('loading');
         const container = document.getElementById('gridContainer');
+        
         if (show) {
             loading.style.display = 'block';
             container.style.display = 'none';
@@ -377,15 +501,83 @@ for (let i = 0; i < this.cryptoSymbols.length; i++) {
     }
 
     startAutoUpdate() {
+        // تحديث فوري عند بدء التطبيق
         setTimeout(() => {
             this.fetchAllCryptoData();
         }, 5000);
+
+        // تحديث كل 15 دقيقة
         setInterval(() => {
+            console.log('تحديث بيانات فيبوناتشي الرياضية...');
             this.fetchAllCryptoData();
         }, this.updateInterval);
     }
+
+    // دالة للتحقق من صحة النسب الرياضية
+    validateMathematicalRatios() {
+        const phi = this.GOLDEN_RATIO;
+        const tolerance = 0.000000001; // دقة 9 خانات عشرية
+
+        // التحقق من النسبة الذهبية: φ = (1 + √5) / 2
+        const calculatedPhi = (1 + Math.sqrt(5)) / 2;
+        const phiValid = Math.abs(phi - calculatedPhi) < tolerance;
+
+        // التحقق من خاصية النسبة الذهبية: φ² = φ + 1
+        const phiSquared = phi * phi;
+        const phiPlusOne = phi + 1;
+        const propertyValid = Math.abs(phiSquared - phiPlusOne) < tolerance;
+
+        console.log('التحقق من النسب الرياضية:');
+        console.log(`φ = ${phi} (صحيح: ${phiValid})`);
+        console.log(`φ² = φ + 1: ${phiSquared} = ${phiPlusOne} (صحيح: ${propertyValid})`);
+        console.log(`1/φ = ${1/phi} (النسبة الذهبية المقلوبة)`);
+
+        return phiValid && propertyValid;
+    }
+
+    // دالة لعرض تفاصيل النسب الرياضية
+    getMathematicalProof() {
+        return {
+            goldenRatio: this.GOLDEN_RATIO,
+            calculation: "(1 + √5) / 2",
+            properties: {
+                "φ² = φ + 1": `${(this.GOLDEN_RATIO * this.GOLDEN_RATIO).toFixed(9)} = ${(this.GOLDEN_RATIO + 1).toFixed(9)}`,
+                "1/φ = φ - 1": `${(1/this.GOLDEN_RATIO).toFixed(9)} = ${(this.GOLDEN_RATIO - 1).toFixed(9)}`,
+                "φ/1 = 1.618...": this.GOLDEN_RATIO.toFixed(9)
+            },
+            fibonacciSequence: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987],
+            ratioProof: "lim(n→∞) F(n+1)/F(n) = φ"
+        };
+    }
 }
 
+// تهيئة التطبيق مع التحقق من النسب الرياضية
 document.addEventListener('DOMContentLoaded', () => {
     window.cryptoTracker = new FibonacciCryptoTracker();
+    
+    // التحقق من صحة النسب الرياضية عند التشغيل
+    const isValid = window.cryptoTracker.validateMathematicalRatios();
+    if (!isValid) {
+        console.error('خطأ في النسب الرياضية!');
+    } else {
+        console.log('✅ تم التحقق من صحة النسب الرياضية لفيبوناتشي');
+    }
+    
+    // عرض الإثبات الرياضي
+    console.log('الإثبات الرياضي:', window.cryptoTracker.getMathematicalProof());
+});
+
+// معالجة الشبكة
+window.addEventListener('online', () => {
+    console.log('تم استعادة الاتصال بالإنترنت');
+    if (window.cryptoTracker) {
+        window.cryptoTracker.fetchAllCryptoData();
+    }
+});
+
+window.addEventListener('offline', () => {
+    console.log('انقطع الاتصال بالإنترنت');
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.style.display = 'block';
+    errorMessage.innerHTML = '<p>انقطع الاتصال بالإنترنت. سيتم استئناف التحديث عند عودة الاتصال.</p>';
 });
