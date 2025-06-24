@@ -161,18 +161,11 @@ body {
     flex-wrap: wrap;
     gap: 10px;
 }
-/* إضافة النسبة الذهبية */
+/* إخفاء النسبة المكررة */
 .card-header::after {
-    content: 'φ = 1.618';
-    font-family: var(--font-numbers);
-    font-size: 0.9rem;
-    color: var(--secondary-color);
-    background: rgba(255, 215, 0, 0.1);
-    padding: 5px 10px;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+    display: none !important;
 }
+
 @media (max-width: 768px) {
     .card-header {
         flex-direction: column;
@@ -188,13 +181,30 @@ body {
     letter-spacing: 0.05em; /* إضافة هذا السطر */
 }
 
+/* تحسين مؤشر الاتجاه */
 .trend-indicator {
-    padding: 5px 10px;
+    display: inline-block !important;
+    padding: 6px 12px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: bold;
+    font-family: var(--font-arabic);
 }
-
+/* دمج النسبة مع الاتجاه */
+.trend-up::before {
+    content: 'φ 1.618 • ';
+    color: var(--secondary-color);
+    font-family: var(--font-numbers);
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+.trend-down::before {
+    content: 'φ 1.618 • ';
+    color: var(--secondary-color);
+    font-family: var(--font-numbers);
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
 .trend-up {
     background: rgba(0, 200, 83, 0.2);
     color: var(--success-color);
