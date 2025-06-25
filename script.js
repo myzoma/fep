@@ -2,7 +2,7 @@ class FibonacciCryptoTracker {
     constructor() {
         this.cryptoSymbols = [
             'BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT',
-            'XRPUSDT', 'SOLUSDT', 'DOTUSDT', 'DOGEUSDT',
+            'XRPUSDT', 'SOLUSDT', 'DOTUSDT', 'DOGEUSDT',https://api1.binance.com/
             'AVAXUSDT', 'SHIBUSDT', 'MATICUSDT', 'LTCUSDT'
         ];
         
@@ -82,8 +82,8 @@ class FibonacciCryptoTracker {
             try {
                 // محاولة Binance أولاً
                 const [tickerResponse, klineResponse] = await Promise.all([
-                    fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`),
-                    fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=100`)
+                    fetch(`https://api1.binance.com/api/v3/ticker/24hr?symbol=${symbol}`),
+                    fetch(`https://api1.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=100`)
                 ]);
                 
                 if (tickerResponse.ok && klineResponse.ok) {
