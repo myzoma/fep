@@ -2,7 +2,7 @@ class FibonacciCryptoTracker {
     constructor() {
         this.cryptoSymbols = [
             'BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT',
-            'XRPUSDT', 'SOLUSDT', 'DOTUSDT', 'DOGEUSDT',https://api1.binance.com/
+            'XRPUSDT', 'SOLUSDT', 'DOTUSDT', 'DOGEUSDT',
             'AVAXUSDT', 'SHIBUSDT', 'MATICUSDT', 'LTCUSDT'
         ];
         
