@@ -242,24 +242,30 @@ class FibonacciCryptoTracker {
         let support = null, nextSupport = null;
 
         // العثور على أقرب مقاومة
-        for (let level of sortedLevels) {
-            if (level.value > currentPrice) {
-                resistance = level.value;
-                const nextIndex = sortedLevels.findIndex(l => l.value === level.value) + 1;
-                nextResistance = nextIndex < sortedLevels.length ? sortedLevels[nextIndex].value : level.value;
-                break;
-            }
-        }
+       for (let level of sortedLevels) {
+    if (level.value > currentPrice) {
+        resistance = level.value;
+        const nextIndex = sortedLevels.findIndex(l => l.value === level.value) + 1;
+        nextResistance = nextIndex < sortedLevels.length ? 
+                        sortedLevels[nextIndex].value : 
+                        resistance * this.GOLDEN_RATIO;
+        break;
+    }
+}
+
 
         // العثور على أقرب دعم
         for (let i = sortedLevels.length - 1; i >= 0; i--) {
-            if (sortedLevels[i].value < currentPrice) {
-                support = sortedLevels[i].value;
-                const prevIndex = i - 1;
-                nextSupport = prevIndex >= 0 ? sortedLevels[prevIndex].value : sortedLevels[i].value;
-                break;
-            }
-        }
+    if (sortedLevels[i].value < currentPrice) {
+        support = sortedLevels[i].value;
+        const prevIndex = i - 1;
+        nextSupport = prevIndex >= 0 ? 
+                     sortedLevels[prevIndex].value : 
+                     support / this.GOLDEN_RATIO;
+        break;
+    }
+}
+           
 
         return {
             resistance: resistance || high,
