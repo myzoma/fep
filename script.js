@@ -247,8 +247,9 @@ class FibonacciCryptoTracker {
         resistance = level.value;
         const nextIndex = sortedLevels.findIndex(l => l.value === level.value) + 1;
         nextResistance = nextIndex < sortedLevels.length ? 
-                        sortedLevels[nextIndex].value : 
-                        resistance * this.GOLDEN_RATIO;
+                sortedLevels[nextIndex].value : 
+                resistance + (range * 0.618);
+
         break;
     }
 }
@@ -260,8 +261,9 @@ class FibonacciCryptoTracker {
         support = sortedLevels[i].value;
         const prevIndex = i - 1;
         nextSupport = prevIndex >= 0 ? 
-                     sortedLevels[prevIndex].value : 
-                     support / this.GOLDEN_RATIO;
+             sortedLevels[prevIndex].value : 
+             support - (range * 0.618);
+
         break;
     }
 }
