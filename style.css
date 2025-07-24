@@ -858,8 +858,8 @@ th {
 }
 /* البطاقة المربعة */
 .crypto-card {
-    width: 300px;
-    height: 300px; /* مربع كامل */
+    width: 400px;
+    height: 500px; /* مربع كامل */
     display: flex;
     flex-direction: column;
     padding: 12px;
