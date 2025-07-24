@@ -379,11 +379,10 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
         });
     }
 
-   function createMathematicalFibonacciCard(data) {
+  function createMathematicalFibonacciCard(data) {
     const card = document.createElement('div');
     card.className = 'crypto-card mathematical-fib';
     
-    // التحضير للبيانات (كما هو)
     const trendClass = data.isUpTrend ? 'trend-up' : 'trend-down';
     const trendText = data.isUpTrend ? 'صاعد' : 'هابط';
     const priceChangeClass = data.priceChange >= 0 ? 'positive' : 'negative';
@@ -391,61 +390,63 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
     const currentRatio = (data.currentPrice - data.significantLow) / (data.significantHigh - data.significantLow);
     const currentFibPercentage = (currentRatio * 100).toFixed(1);
 
-    // البنية الجديدة بدون scroll
     card.innerHTML = `
-        <!-- الرأس (ثابت) -->
         <div class="card-header">
             <div class="crypto-name">${data.symbol}</div>
             <div class="trend-indicator ${trendClass}">${trendText}</div>
             <div class="golden-ratio-badge">φ = ${data.goldenRatio.toFixed(3)}</div>
         </div>
-
-        <!-- المحتوى الرئيسي (يتكيف تلقائياً) -->
-        <div class="card-main-content">
-            <!-- قسم الأسعار -->
-            <div class="price-section compact">
-                <div class="current-price compact">$${formatPrice(data.currentPrice)}</div>
-                <div class="price-change compact ${priceChangeClass}">
-                    ${priceChangeSign}${data.priceChange.toFixed(2)}%
-                </div>
-                <div class="current-fib-position compact">
-                    موقع فيبوناتشي: ${currentFibPercentage}%
-                </div>
+        
+        <div class="price-section">
+            <div class="current-price">$${formatPrice(data.currentPrice)}</div>
+            <div class="price-change ${priceChangeClass}">
+                ${priceChangeSign}${data.priceChange.toFixed(2)}%
             </div>
-
-            <!-- مستويات فيبوناتشي (مضغوطة) -->
-            <div class="mathematical-fibonacci-levels compact">
-                ${createCompactFibLevel('61.8% (φ⁻¹)', data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'], 'golden')}
-                ${createCompactFibLevel('المقاومة', data.fibLevels.resistance, 'resistance')}
-                ${createCompactFibLevel('الدعم', data.fibLevels.support, 'support')}
+            <div class="current-fib-position">
+                موقع فيبوناتشي: ${currentFibPercentage}%
             </div>
-
-            <!-- الاستراتيجية (مختصرة) -->
-            <div class="strategy-section compact">
-                <div class="strategy-title">${data.strategy.title}</div>
-                <div class="strategy-text">${shortenText(data.strategy.description, 100)}</div>
+        </div>
+        
+        <div class="mathematical-fibonacci-levels">
+            <div class="fib-header">مستويات فيبوناتشي الرياضية الحقيقية</div>
+            
+            <div class="level-group golden-level">
+                <div class="level-title">النسبة الذهبية 61.8% (φ⁻¹)</div>
+                <div class="level-value golden">$${formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</div>
             </div>
+            
+            <div class="level-group">
+                <div class="level-title">مقاومة فيبوناتشي</div>
+                <div class="level-value resistance">$${formatPrice(data.fibLevels.resistance)}</div>
+            </div>
+            
+            <div class="level-group">
+                <div class="level-title">الهدف التالي (161.8% φ)</div>
+                <div class="level-value next-target">$${formatPrice(data.fibLevels.nextResistance)}</div>
+            </div>
+            
+            <div class="level-group">
+                <div class="level-title">دعم فيبوناتشي</div>
+                <div class="level-value support">$${formatPrice(data.fibLevels.support)}</div>
+            </div>
+        </div>
+        
+        <div class="strategy-section">
+            <div class="strategy-title">${data.strategy.title}</div>
+            <div class="strategy-text">${data.strategy.description}</div>
         </div>
     `;
 
     return card;
 }
 
-// دوال مساعدة جديدة
-function createCompactFibLevel(title, value, type) {
-    return `
-        <div class="level-group compact ${type}">
-            <span class="level-title">${title}:</span>
-            <span class="level-value">$${formatPrice(value)}</span>
-        </div>
-    `;
+// دالة مساعدة لتنسيق الأسعار
+function formatPrice(price) {
+    return price.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 8
+    });
 }
-
-function shortenText(text, maxLength) {
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-}
-
-
     formatPrice(price) {
         if (price >= 1000) {
             return price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
