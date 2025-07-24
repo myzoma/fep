@@ -381,64 +381,68 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
 
    createMathematicalFibonacciCard(data) {
     const card = document.createElement('div');
-    card.className = 'crypto-card mathematical-fib';
-
-    // حجم ثابت دون سكرول
-    card.style.width = '300px';
-    card.style.height = '300px';
-    card.style.background = '#1e1e2f';
-    card.style.color = '#fff';
-    card.style.borderRadius = '10px';
-    card.style.padding = '8px';
-    card.style.display = 'grid';
-    card.style.gridTemplateRows = 'auto auto auto auto auto auto';
-    card.style.fontSize = '11px';
-    card.style.lineHeight = '1.3';
-    card.style.gap = '5px';
-    card.style.boxShadow = '0 4px 10px rgba(0,0,0,0.4)';
-    card.style.overflow = 'hidden';
+    card.className = 'crypto-card';
+    card.style.cssText = `
+        width: 300px;
+        height: 300px;
+        background: #1e1e2f;
+        color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        padding: 10px;
+        font-family: 'Tajawal', sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-sizing: border-box;
+        font-size: 11px;
+        line-height: 1.3;
+    `;
 
     const trendText = data.isUpTrend ? 'صاعد' : 'هابط';
     const trendColor = data.isUpTrend ? '#2ecc71' : '#e74c3c';
-    const priceChangeSign = data.priceChange >= 0 ? '+' : '';
+    const priceSign = data.priceChange >= 0 ? '+' : '';
     const priceColor = data.priceChange >= 0 ? '#2ecc71' : '#e74c3c';
     const currentRatio = (data.currentPrice - data.significantLow) / (data.significantHigh - data.significantLow);
     const currentFibPercentage = (currentRatio * 100).toFixed(1);
 
     card.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
             <div><strong>${data.symbol}</strong></div>
-            <div style="background:${trendColor};padding:1px 5px;border-radius:4px;">${trendText}</div>
-            <div style="background:gold;color:black;padding:1px 4px;border-radius:4px;">φ=${data.goldenRatio.toFixed(2)}</div>
+            <div style="background: ${trendColor}; padding: 2px 6px; border-radius: 6px;">${trendText}</div>
+            <div style="background: gold; color: black; padding: 2px 6px; border-radius: 6px;">φ = ${data.goldenRatio.toFixed(2)}</div>
         </div>
 
-        <div style="text-align:center;">
-            $${this.formatPrice(data.currentPrice)} 
-            <span style="color:${priceColor};">${priceChangeSign}${data.priceChange.toFixed(2)}%</span><br>
-            فيبوناتشي: ${currentFibPercentage}%
+        <div style="text-align: center; font-size: 12px; margin-top: 4px;">
+            <strong>$${this.formatPrice(data.currentPrice)}</strong>
+            <span style="color: ${priceColor}; font-weight: bold;">${priceSign}${data.priceChange.toFixed(2)}%</span><br>
+            <span style="opacity: 0.8;">فيبوناتشي: ${currentFibPercentage}%</span>
         </div>
 
-        <div>
-            <strong>مستويات:</strong><br>
-            61.8%: $${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}<br>
-            المقاومة: $${this.formatPrice(data.fibLevels.resistance)}<br>
-            الهدف (φ): $${this.formatPrice(data.fibLevels.nextResistance)}
+        <hr style="border: 0; border-top: 1px solid #444; margin: 5px 0;">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+            <div>61.8%: <strong>$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</strong></div>
+            <div>المقاومة: <strong>$${this.formatPrice(data.fibLevels.resistance)}</strong></div>
+            <div>الهدف (φ): <strong>$${this.formatPrice(data.fibLevels.nextResistance)}</strong></div>
+            <div>الدعم: <strong>$${this.formatPrice(data.fibLevels.support)}</strong></div>
+            <div>الهدف التالي (د): <strong>$${this.formatPrice(data.fibLevels.nextSupport)}</strong></div>
+            <div>المدى: <strong>$${this.formatPrice(data.significantLow)} - $${this.formatPrice(data.significantHigh)}</strong></div>
         </div>
 
-        <div>
-            الدعم: $${this.formatPrice(data.fibLevels.support)}<br>
-            الهدف التالي (د): $${this.formatPrice(data.fibLevels.nextSupport)}<br>
-            المدى: $${this.formatPrice(data.significantLow)} - $${this.formatPrice(data.significantHigh)}
-        </div>
+        <hr style="border: 0; border-top: 1px solid #444; margin: 5px 0;">
 
-        <div>
-            <strong>φ:</strong> ${data.goldenRatio.toFixed(2)} | 1/φ: ${(1/data.goldenRatio).toFixed(2)} | φ²: ${(data.goldenRatio**2).toFixed(2)}<br>
+        <div style="font-size: 11px;">
+            φ = ${data.goldenRatio.toFixed(2)} |
+            1/φ = ${(1 / data.goldenRatio).toFixed(2)} |
+            φ² = ${(data.goldenRatio ** 2).toFixed(2)}<br>
             <strong>قوة:</strong> <span class="${this.getStrengthClass(data.levelStrength)}">${data.levelStrength}</span>
         </div>
 
-        <div>
-            <strong>${data.strategy.title}</strong>: ${data.strategy.description}<br>
-            <small><strong>أساس:</strong> ${data.strategy.mathematicalBasis}</small>
+        <div style="margin-top: 4px;">
+            <div style="font-weight: bold;">${data.strategy.title}</div>
+            <div style="opacity: 0.85;">${data.strategy.description}</div>
+            <div style="font-size: 10px;"><strong>الأساس:</strong> ${data.strategy.mathematicalBasis}</div>
         </div>
     `;
 
