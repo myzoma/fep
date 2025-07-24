@@ -163,15 +163,33 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* شبكة البطاقات */
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
+/* بطاقات مربعة مع صورة أعلى ونص أسفل */
+.card {
+    aspect-ratio: 1/1; /* نسبة عرض إلى ارتفاع 1:1 */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* إخفاء أي محتوى زائد */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: white;
 }
 
+.card-img {
+    height: 60%; /* 60% من البطاقة للصورة */
+    overflow: hidden;
+}
+
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* تغطية المساحة دون تشويه */
+}
+
+.card-content {
+    padding: 12px;
+    height: 40%; /* 40% من البطاقة للنص */
+    overflow-y: auto; /* تمكين التمرير إذا زاد النص */
+}
 @media (min-width: 768px) {
     .grid-container {
         grid-template-columns: repeat(2, 1fr);
