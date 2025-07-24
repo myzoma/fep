@@ -379,75 +379,99 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
         });
     }
 
-   createMathematicalFibonacciCard(data) {
-    const card = document.createElement('div');
-    card.className = 'crypto-card';
-    card.style.cssText = `
-        width: 300px;
-        height: 300px;
-        background: #1e1e2f;
-        color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        padding: 10px;
-        font-family: 'Tajawal', sans-serif;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        box-sizing: border-box;
-        font-size: 11px;
-        line-height: 1.3;
-    `;
+    createMathematicalFibonacciCard(data) {
+        const card = document.createElement('div');
+        card.className = 'crypto-card mathematical-fib';
+        
+        const trendClass = data.isUpTrend ? 'trend-up' : 'trend-down';
+        const trendText = data.isUpTrend ? 'صاعد' : 'هابط';
+        const priceChangeClass = data.priceChange >= 0 ? 'positive' : 'negative';
+        const priceChangeSign = data.priceChange >= 0 ? '+' : '';
 
-    const trendText = data.isUpTrend ? 'صاعد' : 'هابط';
-    const trendColor = data.isUpTrend ? '#2ecc71' : '#e74c3c';
-    const priceSign = data.priceChange >= 0 ? '+' : '';
-    const priceColor = data.priceChange >= 0 ? '#2ecc71' : '#e74c3c';
-    const currentRatio = (data.currentPrice - data.significantLow) / (data.significantHigh - data.significantLow);
-    const currentFibPercentage = (currentRatio * 100).toFixed(1);
+        // حساب النسبة الحالية من المدى
+        const currentRatio = (data.currentPrice - data.significantLow) / (data.significantHigh - data.significantLow);
+        const currentFibPercentage = (currentRatio * 100).toFixed(1);
 
-    card.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div><strong>${data.symbol}</strong></div>
-            <div style="background: ${trendColor}; padding: 2px 6px; border-radius: 6px;">${trendText}</div>
-            <div style="background: gold; color: black; padding: 2px 6px; border-radius: 6px;">φ = ${data.goldenRatio.toFixed(2)}</div>
-        </div>
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="crypto-name">${data.symbol}</div>
+                <div class="trend-indicator ${trendClass}">${trendText}</div>
+                <div class="golden-ratio-badge">φ = ${data.goldenRatio.toFixed(3)}</div>
+            </div>
+            
+            <div class="price-section">
+                <div class="current-price">$${this.formatPrice(data.currentPrice)}</div>
+                <div class="price-change ${priceChangeClass}">
+                    ${priceChangeSign}${data.priceChange.toFixed(2)}%
+                </div>
+                <div class="current-fib-position">
+                    موقع فيبوناتشي: ${currentFibPercentage}%
+                </div>
+            </div>
+            
+            <div class="mathematical-fibonacci-levels">
+                <div class="fib-header">مستويات فيبوناتشي الرياضية الحقيقية</div>
+                
+                <div class="level-group golden-level">
+                    <div class="level-title">النسبة الذهبية 61.8% (φ⁻¹)</div>
+                    <div class="level-value golden">$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</div>
+                </div>
+                
+                <div class="level-group">
+                    <div class="level-title">مقاومة فيبوناتشي</div>
+                    <div class="level-value resistance">$${this.formatPrice(data.fibLevels.resistance)}</div>
+                </div>
+                
+                <div class="level-group">
+                    <div class="level-title">الهدف التالي (161.8% φ)</div>
+                    <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextResistance)}</div>
+                </div>
+                
+                <div class="level-group">
+                    <div class="level-title">دعم فيبوناتشي</div>
+                    <div class="level-value support">$${this.formatPrice(data.fibLevels.support)}</div>
+                </div>
+                
+                <div class="level-group">
+                    <div class="level-title">الهدف التالي (دعم)</div>
+                    <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextSupport)}</div>
+                </div>
+            </div>
+            
+            <div class="mathematical-details">
+                <div class="math-formula">
+                    <strong>النسب الرياضية المطبقة:</strong><br>
+                    φ = ${data.goldenRatio.toFixed(9)}<br>
+                    1/φ = ${(1/data.goldenRatio).toFixed(9)}<br>
+                    φ² = ${(data.goldenRatio * data.goldenRatio).toFixed(9)}
+                </div>
+                <div class="range-info">
+                    المدى: $${this.formatPrice(data.significantLow)} - $${this.formatPrice(data.significantHigh)}
+                    <br>قيمة المدى: $${this.formatPrice(data.fibLevels.range)}
+                </div>
+            </div>
+            
+            <div class="strength-indicator mathematical">
+                <span class="strength-label">قوة النسبة الذهبية:</span>
+                <span class="strength-value ${this.getStrengthClass(data.levelStrength)}">${data.levelStrength}</span>
+            </div>
+            
+            <div class="strategy-section mathematical">
+                <div class="strategy-title">${data.strategy.title}</div>
+                <div class="strategy-text">${data.strategy.description}</div>
+                <div class="mathematical-basis">
+                    <small><strong>الأساس الرياضي:</strong> ${data.strategy.mathematicalBasis}</small>
+                </div>
+            </div>
+            
+            <div class="fibonacci-sequence">
+                <small><strong>متتالية فيبوناتشي:</strong> 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233...</small>
+            </div>
+        `;
 
-        <div style="text-align: center; font-size: 12px; margin-top: 4px;">
-            <strong>$${this.formatPrice(data.currentPrice)}</strong>
-            <span style="color: ${priceColor}; font-weight: bold;">${priceSign}${data.priceChange.toFixed(2)}%</span><br>
-            <span style="opacity: 0.8;">فيبوناتشي: ${currentFibPercentage}%</span>
-        </div>
+        return card;
+    }
 
-        <hr style="border: 0; border-top: 1px solid #444; margin: 5px 0;">
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
-            <div>61.8%: <strong>$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</strong></div>
-            <div>المقاومة: <strong>$${this.formatPrice(data.fibLevels.resistance)}</strong></div>
-            <div>الهدف (φ): <strong>$${this.formatPrice(data.fibLevels.nextResistance)}</strong></div>
-            <div>الدعم: <strong>$${this.formatPrice(data.fibLevels.support)}</strong></div>
-            <div>الهدف التالي (د): <strong>$${this.formatPrice(data.fibLevels.nextSupport)}</strong></div>
-            <div>المدى: <strong>$${this.formatPrice(data.significantLow)} - $${this.formatPrice(data.significantHigh)}</strong></div>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid #444; margin: 5px 0;">
-
-        <div style="font-size: 11px;">
-            φ = ${data.goldenRatio.toFixed(2)} |
-            1/φ = ${(1 / data.goldenRatio).toFixed(2)} |
-            φ² = ${(data.goldenRatio ** 2).toFixed(2)}<br>
-            <strong>قوة:</strong> <span class="${this.getStrengthClass(data.levelStrength)}">${data.levelStrength}</span>
-        </div>
-
-        <div style="margin-top: 4px;">
-            <div style="font-weight: bold;">${data.strategy.title}</div>
-            <div style="opacity: 0.85;">${data.strategy.description}</div>
-            <div style="font-size: 10px;"><strong>الأساس:</strong> ${data.strategy.mathematicalBasis}</div>
-        </div>
-    `;
-
-    return card;
-}
 
     formatPrice(price) {
         if (price >= 1000) {
