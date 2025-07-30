@@ -218,9 +218,9 @@ html {
 /* شبكة البطاقات */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
-    max-width: 1000px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -228,30 +228,31 @@ html {
 @media (min-width: 768px) {
     .grid-container {
         grid-template-columns: repeat(2, 1fr);
-        max-width: 800px;
+        max-width: 700px;
     }
 }
 
 @media (min-width: 1200px) {
     .grid-container {
         grid-template-columns: repeat(3, 1fr);
-        max-width: 1000px;
+        max-width: 900px;
     }
 }
 
 /* بطاقات العملات المشفرة */
 .crypto-card {
     background: var(--bg-card);
-    border-radius: 15px;
-    padding: 15px;
+    border-radius: 12px;
+    padding: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    max-width: 400px;
+    max-width: 320px;
     margin: 0 auto;
     height: fit-content;
+    min-height: 180px;
 }
 
 .crypto-card::before {
@@ -274,13 +275,13 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
-    padding: 10px;
+    margin-bottom: 8px;
+    padding: 6px 8px;
     background: linear-gradient(135deg, rgba(0, 204, 255, 0.1), rgba(255, 215, 0, 0.1));
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
 }
 
 .card-header::after {
@@ -289,7 +290,7 @@ html {
 
 /* اسم العملة المشفرة */
 .crypto-name {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     color: var(--primary-color);
     font-family: var(--font-english);
@@ -329,7 +330,7 @@ html {
 
 /* قسم الأسعار */
 .price-section {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .current-price,
@@ -412,6 +413,39 @@ html {
 
 .next-target {
     color: var(--secondary-color);
+}
+
+/* مستويات فيبوناتشي المدمجة */
+.fib-levels-compact {
+    margin: 8px 0;
+}
+
+.level-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 0;
+    font-size: 0.8rem;
+}
+
+.level-label {
+    color: var(--text-muted);
+    font-family: var(--font-arabic);
+}
+
+/* مؤشر القوة المدمج */
+.strength-compact {
+    margin-top: 8px;
+    text-align: center;
+}
+
+.strength-compact .strength-value {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 /* مؤشر القوة */

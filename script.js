@@ -409,35 +409,24 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
             <div class="price-change ${priceChangeClass}">
                 ${priceChangeSign}${data.priceChange.toFixed(2)}%
             </div>
-            <div class="current-fib-position">
-                موقع فيبوناتشي: ${currentFibPercentage}%
+        </div>
+        
+        <div class="fib-levels-compact">
+            <div class="level-row">
+                <span class="level-label">61.8%:</span>
+                <span class="level-value golden">$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</span>
+            </div>
+            <div class="level-row">
+                <span class="level-label">مقاومة:</span>
+                <span class="level-value resistance">$${this.formatPrice(data.fibLevels.resistance)}</span>
+            </div>
+            <div class="level-row">
+                <span class="level-label">دعم:</span>
+                <span class="level-value support">$${this.formatPrice(data.fibLevels.support)}</span>
             </div>
         </div>
         
-        <div class="mathematical-fibonacci-levels">
-            <div class="level-group golden-level">
-                <div class="level-title">النسبة الذهبية 61.8%</div>
-                <div class="level-value golden">$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</div>
-            </div>
-            
-            <div class="level-group">
-                <div class="level-title">المقاومة</div>
-                <div class="level-value resistance">$${this.formatPrice(data.fibLevels.resistance)}</div>
-            </div>
-            
-            <div class="level-group">
-                <div class="level-title">الدعم</div>
-                <div class="level-value support">$${this.formatPrice(data.fibLevels.support)}</div>
-            </div>
-            
-            <div class="level-group">
-                <div class="level-title">الهدف التالي</div>
-                <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextResistance)}</div>
-            </div>
-        </div>
-        
-        <div class="strength-indicator mathematical">
-            <span class="strength-label">قوة المستوى:</span>
+        <div class="strength-compact">
             <span class="strength-value ${this.getStrengthClass(data.levelStrength)}">${data.levelStrength}</span>
         </div>
     `;
