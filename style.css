@@ -43,7 +43,7 @@ html {
 
 /* الحاوي الرئيسي */
 .container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -218,9 +218,9 @@ html {
 /* شبكة البطاقات */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 25px;
-    max-width: 1200px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -228,12 +228,14 @@ html {
 @media (min-width: 768px) {
     .grid-container {
         grid-template-columns: repeat(2, 1fr);
+        max-width: 800px;
     }
 }
 
 @media (min-width: 1200px) {
     .grid-container {
         grid-template-columns: repeat(3, 1fr);
+        max-width: 1000px;
     }
 }
 
@@ -241,12 +243,15 @@ html {
 .crypto-card {
     background: var(--bg-card);
     border-radius: 15px;
-    padding: 20px;
+    padding: 15px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    max-width: 400px;
+    margin: 0 auto;
+    height: fit-content;
 }
 
 .crypto-card::before {
@@ -269,13 +274,13 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    padding: 15px;
+    margin-bottom: 12px;
+    padding: 10px;
     background: linear-gradient(135deg, rgba(0, 204, 255, 0.1), rgba(255, 215, 0, 0.1));
-    border-radius: 12px;
+    border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
 }
 
 .card-header::after {
@@ -284,7 +289,7 @@ html {
 
 /* اسم العملة المشفرة */
 .crypto-name {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: bold;
     color: var(--primary-color);
     font-family: var(--font-english);
@@ -324,7 +329,7 @@ html {
 
 /* قسم الأسعار */
 .price-section {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .current-price,
@@ -350,12 +355,12 @@ html {
 
 /* مستويات فيبوناتشي */
 .fibonacci-levels {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .level-group {
-    margin-bottom: 15px;
-    padding: 8px;
+    margin-bottom: 5px;
+    padding: 4px 6px;
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.02);
     transition: all 0.3s ease;
@@ -380,10 +385,11 @@ html {
 .strategy-title,
 .strength-label {
     font-family: var(--font-arabic);
+    font-size: 0.85rem;
 }
 
 .level-value {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: bold;
     color: var(--text-light);
     font-family: var(--font-numbers);
@@ -412,9 +418,9 @@ html {
 .strength-indicator {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 15px;
-    padding: 10px;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 6px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
 }

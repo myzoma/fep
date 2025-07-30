@@ -380,6 +380,9 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
             const card = this.createMathematicalFibonacciCard(data);
             container.appendChild(card);
         });
+        
+        // تأكيد أن الحاوية تستخدم CSS Grid
+        container.style.display = 'grid';
     }
 
    createMathematicalFibonacciCard(data) {
@@ -399,7 +402,6 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
         <div class="card-header">
             <div class="crypto-name">${data.symbol}</div>
             <div class="trend-indicator ${trendClass}">${trendText}</div>
-            <div class="golden-ratio-badge">φ = ${data.goldenRatio.toFixed(3)}</div>
         </div>
         
         <div class="price-section">
@@ -413,49 +415,30 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
         </div>
         
         <div class="mathematical-fibonacci-levels">
-            <div class="fib-header">مستويات فيبوناتشي الرياضية الحقيقية</div>
-            
             <div class="level-group golden-level">
-                <div class="level-title">النسبة الذهبية 61.8% (φ⁻¹)</div>
+                <div class="level-title">النسبة الذهبية 61.8%</div>
                 <div class="level-value golden">$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</div>
             </div>
             
             <div class="level-group">
-                <div class="level-title">مقاومة فيبوناتشي</div>
+                <div class="level-title">المقاومة</div>
                 <div class="level-value resistance">$${this.formatPrice(data.fibLevels.resistance)}</div>
             </div>
             
             <div class="level-group">
-                <div class="level-title">الهدف التالي (161.8% φ)</div>
-                <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextResistance)}</div>
-            </div>
-            
-            <div class="level-group">
-                <div class="level-title">دعم فيبوناتشي</div>
+                <div class="level-title">الدعم</div>
                 <div class="level-value support">$${this.formatPrice(data.fibLevels.support)}</div>
             </div>
             
             <div class="level-group">
-                <div class="level-title">الهدف التالي (دعم)</div>
-                <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextSupport)}</div>
-            </div>
-        </div>
-        
-        <div class="mathematical-details">
-            <div class="range-info">
-                المدى: $${this.formatPrice(data.significantLow)} - $${this.formatPrice(data.significantHigh)}
-                <br>قيمة المدى: $${this.formatPrice(data.fibLevels.range)}
+                <div class="level-title">الهدف التالي</div>
+                <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextResistance)}</div>
             </div>
         </div>
         
         <div class="strength-indicator mathematical">
-            <span class="strength-label">قوة النسبة الذهبية:</span>
+            <span class="strength-label">قوة المستوى:</span>
             <span class="strength-value ${this.getStrengthClass(data.levelStrength)}">${data.levelStrength}</span>
-        </div>
-        
-        <div class="strategy-section mathematical">
-            <div class="strategy-title">${data.strategy.title}</div>
-            <div class="strategy-text">${data.strategy.description}</div>
         </div>
     `;
 
@@ -495,7 +478,7 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
             container.style.display = 'none';
         } else {
             loading.style.display = 'none';
-            container.style.display = 'grid';
+            // سيتم تعيين display: grid في renderCryptoCards
         }
     }
 
