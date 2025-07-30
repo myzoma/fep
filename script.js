@@ -409,24 +409,32 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
             <div class="price-change ${priceChangeClass}">
                 ${priceChangeSign}${data.priceChange.toFixed(2)}%
             </div>
+            <div class="current-fib-position">
+                موقع فيبوناتشي: ${currentFibPercentage}%
+            </div>
         </div>
         
         <div class="fib-levels-compact">
             <div class="level-row">
-                <span class="level-label">61.8%:</span>
+                <span class="level-label">النسبة الذهبية 61.8%:</span>
                 <span class="level-value golden">$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</span>
             </div>
             <div class="level-row">
-                <span class="level-label">مقاومة:</span>
+                <span class="level-label">المقاومة:</span>
                 <span class="level-value resistance">$${this.formatPrice(data.fibLevels.resistance)}</span>
             </div>
             <div class="level-row">
-                <span class="level-label">دعم:</span>
+                <span class="level-label">الدعم:</span>
                 <span class="level-value support">$${this.formatPrice(data.fibLevels.support)}</span>
+            </div>
+            <div class="level-row">
+                <span class="level-label">الهدف التالي:</span>
+                <span class="level-value next-target">$${this.formatPrice(data.fibLevels.nextResistance)}</span>
             </div>
         </div>
         
         <div class="strength-compact">
+            <span class="strength-label">قوة المستوى:</span>
             <span class="strength-value ${this.getStrengthClass(data.levelStrength)}">${data.levelStrength}</span>
         </div>
     `;
