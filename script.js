@@ -353,26 +353,34 @@ class FibonacciCryptoTracker {
         return `${percentage}%`;
     }
 
-   // استبدل الدالة الحالية بهذه
 calculateGoldenRatioStrength(currentPrice, fibLevels) {
+    // التحقق من وجود fibLevels
+    if (!fibLevels) {
+        console.log('fibLevels غير موجود');
+        return 'غير محدد';
+    }
+    
     // جمع كل المستويات المهمة
     const importantLevels = [];
     
-    // مستويات الارتداد
-    Object.entries(fibLevels.retracementLevels).forEach(([key, value]) => {
-        if (value && (key.includes('61.8') || key.includes('38.2') || key.includes('78.6'))) {
-            importantLevels.push({ name: key, value, type: 'retracement' });
-        }
-    });
+    // إضافة المستويات الأساسية
+    if (fibLevels.support) {
+        importantLevels.push({ name: 'دعم', value: fibLevels.support, type: 'support' });
+    }
+    if (fibLevels.resistance) {
+        importantLevels.push({ name: 'مقاومة', value: fibLevels.resistance, type: 'resistance' });
+    }
+    if (fibLevels.nextResistance) {
+        importantLevels.push({ name: 'مقاومة تالية', value: fibLevels.nextResistance, type: 'next_resistance' });
+    }
+    if (fibLevels.nextSupport) {
+        importantLevels.push({ name: 'دعم تالي', value: fibLevels.nextSupport, type: 'next_support' });
+    }
     
-    // مستويات التمديد
-    Object.entries(fibLevels.extensionLevels).forEach(([key, value]) => {
-        if (value && (key.includes('161.8') || key.includes('261.8'))) {
-            importantLevels.push({ name: key, value, type: 'extension' });
-        }
-    });
-    
-    if (importantLevels.length === 0) return 'غير محدد';
+    if (importantLevels.length === 0) {
+        console.log('لا توجد مستويات متاحة');
+        return 'غير محدد';
+    }
     
     // حساب أقرب مستوى
     let closestLevel = null;
@@ -385,6 +393,12 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
             closestLevel = level;
         }
     });
+    
+    // التحقق من وجود مستوى قريب
+    if (!closestLevel) {
+        console.log('لم يتم العثور على مستوى قريب');
+        return 'غير محدد';
+    }
     
     // تسجيل للتتبع
     console.log(`أقرب مستوى ${closestLevel.name} على بُعد ${(minDistance * 100).toFixed(2)}%`);
@@ -461,7 +475,7 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
     }
 
     processDemoData(data) {
-        const fibLevels = this.calculateFibonacciLevels(data.significantHigh, data.significantLow, data.currentPrice);
+        const fibLevels = this.calculateMathematicalFibonacciLevels(data.significantHigh, data.significantLow, data.currentPrice, data.isUpTrend);
         const strategy = this.generateMathematicalFibonacciStrategy(data.currentPrice, fibLevels, data.isUpTrend);
         
         return {
@@ -472,7 +486,7 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
             significantLow: data.significantLow,
             fibLevels: fibLevels,
             isUpTrend: data.isUpTrend,
-            levelStrength: this.calculateLevelStrength(data.currentPrice, fibLevels),
+            levelStrength: this.calculateGoldenRatioStrength(data.currentPrice, fibLevels),
             strategy: strategy
         };
     }
