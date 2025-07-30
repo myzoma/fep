@@ -473,17 +473,18 @@ html {
 .golden-ratio-badge {
     position: absolute;
     top: 8px;
-    left: 8px;
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.9), rgba(255, 193, 7, 0.9));
-    border-radius: 15px;
-    padding: 3px 6px;
+    right: 8px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 193, 7, 0.15));
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: 12px;
+    padding: 2px 5px;
     display: flex;
     align-items: center;
-    gap: 3px;
-    font-size: 0.7rem;
+    gap: 2px;
+    font-size: 0.6rem;
     font-weight: bold;
-    color: #1a1a2e;
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    color: #ffd700;
+    backdrop-filter: blur(5px);
     z-index: 1;
 }
 
