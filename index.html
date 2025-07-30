@@ -3,45 +3,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <title>مستويات فيبوناتشي للعملات المشفرة</title>
+    <title>محلل فيبوناتشي للعملات الرقمية - الرياضي المتقدم</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- الحاوي الرئيسي -->
     <div class="container">
-       <header class="header">
-    <div class="header-title">
-        <span class="coin-icon">🪙</span>
-        <span class="yaser">CRYPTO</span>
-        <span class="crypto">YASER</span>
+        <!-- الهيدر المحسن -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-coins"></i>
+                    <span class="yaser">YASER</span>
+                    <span class="crypto">CRYPTO</span>
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="header-info">
+                    <h1>محلل فيبوناتشي الرياضي المتقدم</h1>
+                    <p class="subtitle">تحليل دقيق باستخدام النسب الرياضية الحقيقية لفيبوناتشي</p>
+                </div>
+                <div class="update-info">
+                    <div class="update-status">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>آخر تحديث: <span id="lastUpdate">--:--:--</span></span>
+                    </div>
+                    <div class="update-interval">
+                        <i class="fas fa-clock"></i>
+                        <span>تحديث كل 15 دقيقة</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- مؤشر التحميل -->
+        <div id="loading" class="loading">
+            <div class="spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <p>جاري تحليل مستويات فيبوناتشي الرياضية...</p>
+        </div>
+
+        <!-- رسالة الخطأ -->
+        <div id="errorMessage" class="error-message" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>حدث خطأ في جلب البيانات. يرجى المحاولة مرة أخرى.</p>
+            <button onclick="window.cryptoTracker.fetchAllCryptoData()" class="btn btn-primary">
+                <i class="fas fa-redo"></i>
+                إعادة المحاولة
+            </button>
+        </div>
+
+        <!-- شبكة البطاقات -->
+        <div id="gridContainer" class="grid-container" style="display: none;"></div>
+
+        <!-- معلومات إضافية -->
+        <div class="additional-info">
+            <div class="info-card">
+                <h3><i class="fas fa-info-circle"></i> معلومات النسب الرياضية</h3>
+                <div class="info-content">
+                    <p><strong>النسبة الذهبية (φ):</strong> 1.618033988749</p>
+                    <p><strong>مقلوب النسبة الذهبية:</strong> 0.618033988749</p>
+                    <p><strong>النسبة الذهبية المربعة:</strong> 2.618033988749</p>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3><i class="fas fa-chart-bar"></i> مستويات فيبوناتشي</h3>
+                <div class="info-content">
+                    <p><strong>ارتداد:</strong> 23.6%, 38.2%, 50%, 61.8%, 78.6%</p>
+                    <p><strong>تمديد:</strong> 127.2%, 161.8%, 261.8%, 423.6%</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="update-info">
-        <span>آخر تحديث: <span id="lastUpdate">--:--</span></span>
-        <span class="update-interval">التحديث كل 15 دقيقة</span>
+
+    <!-- النافذة المنبثقة المحسنة -->
+    <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">تفاصيل العملة</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-grid">
+                    <!-- معلومات السعر -->
+                    <div class="modal-section price-info">
+                        <h3><i class="fas fa-dollar-sign"></i> معلومات السعر</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">السعر الحالي:</span>
+                                <span class="value" id="modalCurrentPrice">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">التغير اليومي:</span>
+                                <span class="value" id="modalPriceChange">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">الترند:</span>
+                                <span class="value" id="modalTrend">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- مستويات المقاومة -->
+                    <div class="modal-section resistance-levels">
+                        <h3><i class="fas fa-arrow-up"></i> مستويات المقاومة</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">المقاومة الحالية:</span>
+                                <span class="value resistance" id="modalResistance">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">المقاومة التالية:</span>
+                                <span class="value" id="modalNextResistance">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">النسبة الذهبية:</span>
+                                <span class="value golden" id="modalGoldenRatio">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- مستويات الدعم -->
+                    <div class="modal-section support-levels">
+                        <h3><i class="fas fa-arrow-down"></i> مستويات الدعم</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">الدعم الحالي:</span>
+                                <span class="value support" id="modalSupport">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">الدعم التالي:</span>
+                                <span class="value" id="modalNextSupport">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">المدى:</span>
+                                <span class="value" id="modalRange">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- الاستراتيجية -->
+                    <div class="modal-section strategy">
+                        <h3><i class="fas fa-lightbulb"></i> الاستراتيجية</h3>
+                        <div class="strategy-content">
+                            <div class="strategy-title" id="modalStrategyTitle">--</div>
+                            <div class="strategy-description" id="modalStrategyDesc">--</div>
+                            <div class="strategy-basis" id="modalStrategyBasis">--</div>
+                        </div>
+                    </div>
+
+                    <!-- قوة المستوى -->
+                    <div class="modal-section strength">
+                        <h3><i class="fas fa-battery-full"></i> قوة المستوى</h3>
+                        <div class="strength-content">
+                            <div class="strength-value" id="modalStrength">--</div>
+                            <div class="strength-indicator" id="modalStrengthIndicator"></div>
+                        </div>
+                    </div>
+
+                    <!-- الإجراءات -->
+                    <div class="modal-section actions">
+                        <h3><i class="fas fa-tools"></i> الإجراءات</h3>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="openTradingView()">
+                                <i class="fas fa-chart-line"></i>
+                                فتح TradingView
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyData()">
+                                <i class="fas fa-copy"></i>
+                                نسخ البيانات
+                            </button>
+                            <button class="btn btn-info" onclick="showFibonacciProof()">
+                                <i class="fas fa-calculator"></i>
+                                إثبات فيبوناتشي
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</header>
 
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>جاري تحميل البيانات لجميع أزواج USDT في السوق...</p>
+    <!-- نافذة إثبات فيبوناتشي -->
+    <div id="proofModal" class="modal" style="display: none;">
+        <div class="modal-content proof-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-calculator"></i> الإثبات الرياضي لفيبوناتشي</h2>
+                <button class="modal-close" onclick="closeProofModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="proof-grid">
+                    <div class="proof-section">
+                        <h3>النسبة الذهبية (φ)</h3>
+                        <div class="proof-item">
+                            <span class="formula">φ = (1 + √5) / 2</span>
+                            <span class="result">= 1.618033988749</span>
+                        </div>
+                        <div class="proof-item">
+                            <span class="formula">φ² = φ + 1</span>
+                            <span class="result">= 2.618033988749</span>
+                        </div>
+                    </div>
+                    
+                    <div class="proof-section">
+                        <h3>متتالية فيبوناتشي</h3>
+                        <div class="fibonacci-sequence">
+                            0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377...
+                        </div>
+                        <div class="proof-item">
+                            <span class="formula">lim(n→∞) F(n+1)/F(n) = φ</span>
+                        </div>
+                    </div>
+                    
+                    <div class="proof-section">
+                        <h3>نسب الارتداد</h3>
+                        <div class="retracement-levels">
+                            <div class="level">23.6% = √φ - 1</div>
+                            <div class="level">38.2% = 1 - 1/φ</div>
+                            <div class="level">61.8% = 1/φ (النسبة الذهبية)</div>
+                            <div class="level">78.6% = √(1/φ)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="grid-container" id="gridContainer">
-            <!-- البطاقات ستُضاف هنا ديناميكياً -->
-        </div>
-
-        <div class="error-message" id="errorMessage" style="display: none;">
-            <p>حدث خطأ في تحميل البيانات. سيتم المحاولة مرة أخرى...</p>
-        </div>
-        
-        <footer style="margin-top: 32px; text-align: center; color: #888; font-size: 0.9em;">
-            يتم تحليل وعرض العملات التي تحقق شرط قوة فيبوناتشي تلقائيًا من منصات Binance وOKX بدون تدخل يدوي.<br>
-            إذا لم تظهر عملات، فهذا يعني أنه لا توجد عملات تحقق الشروط أثناء التحديث.
-        </footer>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // متغيرات عامة
+        let currentModalData = null;
+        let currentSymbol = null;
+
+        // دالة فتح النافذة المنبثقة
+        function openModal(symbol) {
+            currentSymbol = symbol;
+            const data = window.cryptoTracker.cryptoData.get(symbol);
+            if (!data) return;
+
+            currentModalData = data;
+            
+            // ملء البيانات
+            document.getElementById('modalTitle').textContent = `${data.symbol} - تحليل فيبوناتشي`;
+            document.getElementById('modalCurrentPrice').textContent = `$${window.cryptoTracker.formatPrice(data.currentPrice)}`;
+            document.getElementById('modalPriceChange').textContent = `${data.priceChange >= 0 ? '+' : ''}${data.priceChange.toFixed(2)}%`;
+            document.getElementById('modalTrend').textContent = data.isUpTrend ? 'صاعد' : 'هابط';
+            
+            document.getElementById('modalResistance').textContent = `$${window.cryptoTracker.formatPrice(data.fibLevels.resistance)}`;
+            document.getElementById('modalNextResistance').textContent = `$${window.cryptoTracker.formatPrice(data.fibLevels.nextResistance)}`;
+            document.getElementById('modalGoldenRatio').textContent = `$${window.cryptoTracker.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}`;
+            
+            document.getElementById('modalSupport').textContent = `$${window.cryptoTracker.formatPrice(data.fibLevels.support)}`;
+            document.getElementById('modalNextSupport').textContent = `$${window.cryptoTracker.formatPrice(data.fibLevels.nextSupport)}`;
+            document.getElementById('modalRange').textContent = `$${window.cryptoTracker.formatPrice(data.fibLevels.range)}`;
+            
+            document.getElementById('modalStrategyTitle').textContent = data.strategy.title;
+            document.getElementById('modalStrategyDesc').textContent = data.strategy.description;
+            document.getElementById('modalStrategyBasis').textContent = data.strategy.mathematicalBasis;
+            
+            document.getElementById('modalStrength').textContent = data.levelStrength;
+            
+            // إظهار النافذة
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        // دالة إغلاق النافذة المنبثقة
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            currentModalData = null;
+            currentSymbol = null;
+        }
+
+        // دالة فتح TradingView
+        function openTradingView() {
+            if (currentSymbol) {
+                const symbol = currentSymbol.replace('USDT', 'USDT');
+                window.open(`https://www.tradingview.com/symbols/BINANCE-${symbol}/`, '_blank');
+            }
+        }
+
+        // دالة نسخ البيانات
+        function copyData() {
+            if (!currentModalData) return;
+            
+            const data = currentModalData;
+            const text = `
+${data.symbol} - تحليل فيبوناتشي الرياضي
+السعر الحالي: $${window.cryptoTracker.formatPrice(data.currentPrice)}
+التغير اليومي: ${data.priceChange.toFixed(2)}%
+المقاومة: $${window.cryptoTracker.formatPrice(data.fibLevels.resistance)}
+الدعم: $${window.cryptoTracker.formatPrice(data.fibLevels.support)}
+الاستراتيجية: ${data.strategy.title}
+قوة المستوى: ${data.levelStrength}
+            `.trim();
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('تم نسخ البيانات بنجاح!');
+            }).catch(() => {
+                alert('فشل في نسخ البيانات');
+            });
+        }
+
+        // دالة إظهار إثبات فيبوناتشي
+        function showFibonacciProof() {
+            document.getElementById('proofModal').style.display = 'flex';
+        }
+
+        // دالة إغلاق نافذة الإثبات
+        function closeProofModal() {
+            document.getElementById('proofModal').style.display = 'none';
+        }
+
+        // إغلاق النوافذ المنبثقة عند النقر خارجها
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            const proofModal = document.getElementById('proofModal');
+            
+            if (event.target === modal) {
+                closeModal();
+            }
+            if (event.target === proofModal) {
+                closeProofModal();
+            }
+        }
+
+        // إغلاق النوافذ المنبثقة بمفتاح ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+                closeProofModal();
+            }
+        });
+
+        // تعديل دالة إنشاء البطاقة لإضافة النقر
+        const originalCreateCard = window.cryptoTracker.createMathematicalFibonacciCard;
+        window.cryptoTracker.createMathematicalFibonacciCard = function(data) {
+            const card = originalCreateCard.call(this, data);
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => openModal(data.symbol + 'USDT'));
+            return card;
+        };
+    </script>
 </body>
-</html>
+</html> 

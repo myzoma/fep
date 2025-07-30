@@ -334,7 +334,7 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
     });
     
     // تسجيل للتتبع
-    console.log(`${fibLevels.symbol || 'Unknown'}: أقرب مستوى ${closestLevel.name} على بُعد ${(minDistance * 100).toFixed(2)}%`);
+    console.log(`أقرب مستوى ${closestLevel.name} على بُعد ${(minDistance * 100).toFixed(2)}%`);
     
     // تحديد القوة
     if (minDistance < 0.01) return 'قوي جداً';
