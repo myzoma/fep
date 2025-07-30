@@ -370,16 +370,20 @@ ${data.symbol} - تحليل فيبوناتشي الرياضي
                     }
                 });
             });
-        });
 
-        // تعديل دالة إنشاء البطاقة لإضافة النقر
-        const originalCreateCard = window.cryptoTracker.createMathematicalFibonacciCard;
-        window.cryptoTracker.createMathematicalFibonacciCard = function(data) {
-            const card = originalCreateCard.call(this, data);
-            card.style.cursor = 'pointer';
-            card.addEventListener('click', () => openModal(data.symbol + 'USDT'));
-            return card;
-        };
+            // تعديل دالة إنشاء البطاقة لإضافة النقر (بعد التهيئة)
+            setTimeout(() => {
+                if (window.cryptoTracker && typeof window.cryptoTracker.createMathematicalFibonacciCard === 'function') {
+                    const originalCreateCard = window.cryptoTracker.createMathematicalFibonacciCard;
+                    window.cryptoTracker.createMathematicalFibonacciCard = function(data) {
+                        const card = originalCreateCard.call(this, data);
+                        card.style.cursor = 'pointer';
+                        card.addEventListener('click', () => openModal(data.symbol + 'USDT'));
+                        return card;
+                    };
+                }
+            }, 1000);
+        });
     </script>
 </body>
 </html> 
