@@ -10,6 +10,9 @@ class FibonacciCryptoTracker {
         // 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377...
         this.GOLDEN_RATIO = 1.618033988749; // φ (فاي) النسبة الذهبية الحقيقية
         
+        // الإطار الزمني الحالي
+        this.currentTimeframe = '1d';
+        
         this.fibonacciRatios = {
             // نسب الارتداد الحقيقية المحسوبة رياضياً
             retracement: [
@@ -83,7 +86,7 @@ class FibonacciCryptoTracker {
                 // محاولة Binance أولاً
                 const [tickerResponse, klineResponse] = await Promise.all([
                     fetch(`https://api1.binance.com/api/v3/ticker/24hr?symbol=${symbol}`),
-                    fetch(`https://api1.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=100`)
+                    fetch(`https://api1.binance.com/api/v3/klines?symbol=${symbol}&interval=${this.currentTimeframe}&limit=100`)
                 ]);
                 
                 if (tickerResponse.ok && klineResponse.ok) {
@@ -560,6 +563,16 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
             fibonacciSequence: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987],
             ratioProof: "lim(n→∞) F(n+1)/F(n) = φ"
         };
+    }
+
+    // دالة تحديث الإطار الزمني
+    updateTimeframe(timeframe) {
+        this.currentTimeframe = timeframe;
+        console.log(`تم تحديث الإطار الزمني إلى: ${timeframe}`);
+        
+        // إعادة جلب البيانات بالإطار الزمني الجديد
+        this.showLoading(true);
+        this.fetchAllCryptoData();
     }
 }
 

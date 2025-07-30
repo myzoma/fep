@@ -218,10 +218,11 @@ html {
 /* شبكة البطاقات */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
-    max-width: 1400px;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 20px;
 }
 
 @media (min-width: 768px) {
@@ -232,7 +233,7 @@ html {
 
 @media (min-width: 1200px) {
     .grid-container {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -909,13 +910,16 @@ th {
 .modal-content {
     background: var(--bg-card);
     border-radius: 20px;
-    max-width: 90vw;
-    max-height: 90vh;
-    width: 1200px;
+    max-width: 95vw;
+    max-height: 95vh;
+    width: 900px;
+    height: 700px;
     overflow: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
     animation: modalSlideIn 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes modalSlideIn {
@@ -961,15 +965,18 @@ th {
 }
 
 .modal-body {
-    padding: 30px;
-    max-height: calc(90vh - 100px);
+    padding: 20px;
+    flex: 1;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    flex: 1;
 }
 
 .modal-section {
@@ -1210,6 +1217,53 @@ th {
     border: 1px solid rgba(0, 204, 255, 0.2);
 }
 
+/* فلتر الإطارات الزمنية */
+.timeframe-filter {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.timeframe-filter h3 {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.timeframe-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.timeframe-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    background: transparent;
+    color: var(--text-light);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.timeframe-btn:hover {
+    background: var(--primary-color);
+    color: var(--bg-dark);
+}
+
+.timeframe-btn.active {
+    background: var(--primary-color);
+    color: var(--bg-dark);
+    box-shadow: 0 0 15px rgba(0, 204, 255, 0.3);
+}
+
 /* معلومات إضافية */
 .additional-info {
     display: grid;
@@ -1258,6 +1312,7 @@ th {
     
     .modal-content {
         width: 95vw;
+        height: 90vh;
         margin: 10px;
     }
     
@@ -1267,7 +1322,7 @@ th {
     }
     
     .modal-body {
-        padding: 20px;
+        padding: 15px;
     }
     
     .proof-grid {
@@ -1292,6 +1347,20 @@ th {
     .btn {
         padding: 10px 15px;
         font-size: 0.9rem;
+    }
+    
+    .timeframe-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .timeframe-btn {
+        width: 100%;
+    }
+    
+    .grid-container {
+        grid-template-columns: 1fr;
+        padding: 0 10px;
     }
 }
 

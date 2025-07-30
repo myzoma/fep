@@ -21,7 +21,6 @@
                     <i class="fas fa-chart-line"></i>
                 </div>
                 <div class="header-info">
-                    <h1>محلل فيبوناتشي الرياضي المتقدم</h1>
                     <p class="subtitle">تحليل دقيق باستخدام النسب الرياضية الحقيقية لفيبوناتشي</p>
                 </div>
                 <div class="update-info">
@@ -53,6 +52,16 @@
                 <i class="fas fa-redo"></i>
                 إعادة المحاولة
             </button>
+        </div>
+
+        <!-- فلتر الإطارات الزمنية -->
+        <div class="timeframe-filter">
+            <h3><i class="fas fa-clock"></i> الإطار الزمني</h3>
+            <div class="timeframe-buttons">
+                <button class="timeframe-btn active" data-timeframe="1d">1 يوم</button>
+                <button class="timeframe-btn" data-timeframe="4h">4 ساعات</button>
+                <button class="timeframe-btn" data-timeframe="1h">1 ساعة</button>
+            </div>
         </div>
 
         <!-- شبكة البطاقات -->
@@ -340,6 +349,27 @@ ${data.symbol} - تحليل فيبوناتشي الرياضي
                 closeModal();
                 closeProofModal();
             }
+        });
+
+        // تفعيل فلتر الإطارات الزمنية
+        document.addEventListener('DOMContentLoaded', () => {
+            const timeframeButtons = document.querySelectorAll('.timeframe-btn');
+            timeframeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // إزالة الفئة النشطة من جميع الأزرار
+                    timeframeButtons.forEach(b => b.classList.remove('active'));
+                    // إضافة الفئة النشطة للزر المحدد
+                    btn.classList.add('active');
+                    
+                    const timeframe = btn.dataset.timeframe;
+                    console.log('تم تغيير الإطار الزمني إلى:', timeframe);
+                    
+                    // هنا يمكن إضافة منطق لتحديث البيانات حسب الإطار الزمني
+                    if (window.cryptoTracker) {
+                        window.cryptoTracker.updateTimeframe(timeframe);
+                    }
+                });
+            });
         });
 
         // تعديل دالة إنشاء البطاقة لإضافة النقر
