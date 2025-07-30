@@ -400,97 +400,57 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
 
     card.innerHTML = `
         <div class="card-header">
-            <div class="crypto-name">${data.symbol}</div>
-            <div class="trend-indicator ${trendClass}">${trendText}</div>
+            <div class="crypto-info">
+                <div class="crypto-name">${data.symbol}</div>
+                <div class="current-price">$${this.formatPrice(data.currentPrice)}</div>
+                <div class="price-change ${priceChangeClass}">
+                    ${priceChangeSign}${data.priceChange.toFixed(2)}%
+                </div>
+            </div>
             <div class="card-actions">
-                <button class="copy-card-btn" onclick="window.cryptoTracker.copyCardAsImage('${data.symbol}')" title="نسخ البطاقة كصورة">
-                    📷
-                </button>
+                <button class="copy-card-btn" onclick="window.cryptoTracker.copyCardAsImage('${data.symbol}')" title="نسخ البطاقة كصورة">📷</button>
             </div>
         </div>
         
         <div class="golden-ratio-badge">
             <span class="phi-symbol">φ</span>
-            <span class="ratio-value">${this.GOLDEN_RATIO.toFixed(3)}</span>
+            <span class="ratio-value">1.618</span>
         </div>
         
-        <div class="price-section">
-            <div class="current-price">$${this.formatPrice(data.currentPrice)}</div>
-            <div class="price-change ${priceChangeClass}">
-                ${priceChangeSign}${data.priceChange.toFixed(2)}%
-            </div>
-            <div class="current-fib-position">
-                موقع فيبوناتشي: ${currentFibPercentage}%
-            </div>
-        </div>
-        
-        <div class="fib-header">
-            <h3>مستويات فيبوناتشي الرياضية</h3>
-        </div>
-        
-        <div class="mathematical-fibonacci-levels">
-            <div class="level-group golden-level">
-                <div class="level-title">النسبة الذهبية 61.8% (φ⁻¹)</div>
-                <div class="level-value golden">$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</div>
+        <div class="card-body">
+            <div class="levels-grid">
+                <div class="level-item support">
+                    <div class="level-label">دعم</div>
+                    <div class="level-value">$${this.formatPrice(data.fibLevels.support)}</div>
+                </div>
+                <div class="level-item resistance">
+                    <div class="level-label">مقاومة</div>
+                    <div class="level-value">$${this.formatPrice(data.fibLevels.resistance)}</div>
+                </div>
+                <div class="level-item target">
+                    <div class="level-label">الهدف</div>
+                    <div class="level-value">$${this.formatPrice(data.fibLevels.nextResistance)}</div>
+                </div>
+                <div class="level-item position">
+                    <div class="level-label">الموقع</div>
+                    <div class="level-value">${currentFibPercentage}%</div>
+                </div>
             </div>
             
-            <div class="level-group">
-                <div class="level-title">المقاومة الحالية</div>
-                <div class="level-value resistance">$${this.formatPrice(data.fibLevels.resistance)}</div>
+            <div class="range-indicator">
+                <div class="range-bar">
+                    <div class="range-fill" style="width: ${currentFibPercentage}%"></div>
+                    <div class="current-position" style="left: ${currentFibPercentage}%"></div>
+                </div>
+                <div class="range-labels">
+                    <span>$${this.formatPrice(data.significantLow)}</span>
+                    <span>$${this.formatPrice(data.significantHigh)}</span>
+                </div>
             </div>
             
-            <div class="level-group">
-                <div class="level-title">الدعم الحالي</div>
-                <div class="level-value support">$${this.formatPrice(data.fibLevels.support)}</div>
-            </div>
-            
-            <div class="level-group">
-                <div class="level-title">الهدف التالي (161.8% φ)</div>
-                <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextResistance)}</div>
-            </div>
-            
-            <div class="level-group">
-                <div class="level-title">الهدف التالي (دعم)</div>
-                <div class="level-value next-support">$${this.formatPrice(data.fibLevels.nextSupport || data.fibLevels.support * 0.618)}</div>
-            </div>
-        </div>
-        
-        <div class="mathematical-details">
-            <div class="detail-item">
-                <span class="detail-label">المدى:</span>
-                <span class="detail-value">$${this.formatPrice(data.significantHigh - data.significantLow)}</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">أعلى قمة:</span>
-                <span class="detail-value">$${this.formatPrice(data.significantHigh)}</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">أقل قاع:</span>
-                <span class="detail-value">$${this.formatPrice(data.significantLow)}</span>
-            </div>
-        </div>
-        
-        <div class="range-info">
-            <div class="range-bar">
-                <div class="range-fill" style="width: ${currentFibPercentage}%"></div>
-                <div class="current-position" style="left: ${currentFibPercentage}%"></div>
-            </div>
-            <div class="range-labels">
-                <span class="range-low">القاع</span>
-                <span class="range-high">القمة</span>
-            </div>
-        </div>
-        
-        <div class="strength-indicator mathematical">
-            <span class="strength-label">قوة النسبة الذهبية:</span>
-            <span class="strength-value ${this.getStrengthClass(data.levelStrength)}">${data.levelStrength}</span>
-        </div>
-        
-        <div class="strategy-section">
-            <h4>${data.strategy.title}</h4>
-            <p class="strategy-description">${data.strategy.description}</p>
-            <div class="mathematical-basis">
-                <small>${data.strategy.mathematicalBasis}</small>
+            <div class="strategy-box ${trendClass}">
+                <div class="strategy-title">${data.strategy.title}</div>
+                <div class="strategy-strength">قوة: ${data.levelStrength}</div>
             </div>
         </div>
     `;
