@@ -402,6 +402,16 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
         <div class="card-header">
             <div class="crypto-name">${data.symbol}</div>
             <div class="trend-indicator ${trendClass}">${trendText}</div>
+            <div class="card-actions">
+                <button class="copy-card-btn" onclick="window.cryptoTracker.copyCardAsImage('${data.symbol}')" title="نسخ البطاقة كصورة">
+                    📷
+                </button>
+            </div>
+        </div>
+        
+        <div class="golden-ratio-badge">
+            <span class="phi-symbol">φ</span>
+            <span class="ratio-value">${this.GOLDEN_RATIO.toFixed(3)}</span>
         </div>
         
         <div class="price-section">
@@ -414,31 +424,74 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
             </div>
         </div>
         
+        <div class="fib-header">
+            <h3>مستويات فيبوناتشي الرياضية</h3>
+        </div>
+        
         <div class="mathematical-fibonacci-levels">
             <div class="level-group golden-level">
-                <div class="level-title">النسبة الذهبية 61.8%</div>
+                <div class="level-title">النسبة الذهبية 61.8% (φ⁻¹)</div>
                 <div class="level-value golden">$${this.formatPrice(data.fibLevels.retracementLevels['61.8% (النسبة الذهبية)'] || 0)}</div>
             </div>
             
             <div class="level-group">
-                <div class="level-title">المقاومة</div>
+                <div class="level-title">المقاومة الحالية</div>
                 <div class="level-value resistance">$${this.formatPrice(data.fibLevels.resistance)}</div>
             </div>
             
             <div class="level-group">
-                <div class="level-title">الدعم</div>
+                <div class="level-title">الدعم الحالي</div>
                 <div class="level-value support">$${this.formatPrice(data.fibLevels.support)}</div>
             </div>
             
             <div class="level-group">
-                <div class="level-title">الهدف التالي</div>
+                <div class="level-title">الهدف التالي (161.8% φ)</div>
                 <div class="level-value next-target">$${this.formatPrice(data.fibLevels.nextResistance)}</div>
+            </div>
+            
+            <div class="level-group">
+                <div class="level-title">الهدف التالي (دعم)</div>
+                <div class="level-value next-support">$${this.formatPrice(data.fibLevels.nextSupport || data.fibLevels.support * 0.618)}</div>
+            </div>
+        </div>
+        
+        <div class="mathematical-details">
+            <div class="detail-item">
+                <span class="detail-label">المدى:</span>
+                <span class="detail-value">$${this.formatPrice(data.significantHigh - data.significantLow)}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">أعلى قمة:</span>
+                <span class="detail-value">$${this.formatPrice(data.significantHigh)}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">أقل قاع:</span>
+                <span class="detail-value">$${this.formatPrice(data.significantLow)}</span>
+            </div>
+        </div>
+        
+        <div class="range-info">
+            <div class="range-bar">
+                <div class="range-fill" style="width: ${currentFibPercentage}%"></div>
+                <div class="current-position" style="left: ${currentFibPercentage}%"></div>
+            </div>
+            <div class="range-labels">
+                <span class="range-low">القاع</span>
+                <span class="range-high">القمة</span>
             </div>
         </div>
         
         <div class="strength-indicator mathematical">
-            <span class="strength-label">قوة المستوى:</span>
+            <span class="strength-label">قوة النسبة الذهبية:</span>
             <span class="strength-value ${this.getStrengthClass(data.levelStrength)}">${data.levelStrength}</span>
+        </div>
+        
+        <div class="strategy-section">
+            <h4>${data.strategy.title}</h4>
+            <p class="strategy-description">${data.strategy.description}</p>
+            <div class="mathematical-basis">
+                <small>${data.strategy.mathematicalBasis}</small>
+            </div>
         </div>
     `;
 
@@ -556,6 +609,124 @@ calculateGoldenRatioStrength(currentPrice, fibLevels) {
         // إعادة جلب البيانات بالإطار الزمني الجديد
         this.showLoading(true);
         this.fetchAllCryptoData();
+    }
+
+    // دالة نسخ البطاقة كصورة
+    async copyCardAsImage(symbol) {
+        try {
+            // البحث عن البطاقة المحددة
+            const cards = document.querySelectorAll('.crypto-card');
+            let targetCard = null;
+            
+            cards.forEach(card => {
+                const cardSymbol = card.querySelector('.crypto-name').textContent;
+                if (cardSymbol === symbol) {
+                    targetCard = card;
+                }
+            });
+            
+            if (!targetCard) {
+                console.error('لم يتم العثور على البطاقة');
+                return;
+            }
+
+            // استخدام html2canvas لتحويل البطاقة إلى صورة
+            if (typeof html2canvas === 'undefined') {
+                // تحميل html2canvas إذا لم يكن متوفراً
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                document.head.appendChild(script);
+                
+                script.onload = () => {
+                    this.generateCardImage(targetCard, symbol);
+                };
+            } else {
+                this.generateCardImage(targetCard, symbol);
+            }
+        } catch (error) {
+            console.error('خطأ في نسخ البطاقة:', error);
+            alert('حدث خطأ أثناء نسخ البطاقة كصورة');
+        }
+    }
+
+    // دالة إنشاء صورة البطاقة
+    async generateCardImage(cardElement, symbol) {
+        try {
+            const canvas = await html2canvas(cardElement, {
+                backgroundColor: '#1a1a2e',
+                scale: 2,
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            });
+
+            // تحويل Canvas إلى Blob
+            canvas.toBlob(async (blob) => {
+                try {
+                    // نسخ الصورة إلى الحافظة
+                    await navigator.clipboard.write([
+                        new ClipboardItem({
+                            'image/png': blob
+                        })
+                    ]);
+                    
+                    // إظهار رسالة نجاح
+                    this.showCopySuccess(symbol);
+                } catch (clipboardError) {
+                    // إذا فشل النسخ للحافظة، قم بتحميل الصورة
+                    this.downloadCardImage(canvas, symbol);
+                }
+            }, 'image/png');
+        } catch (error) {
+            console.error('خطأ في إنشاء الصورة:', error);
+            alert('حدث خطأ أثناء إنشاء الصورة');
+        }
+    }
+
+    // دالة تحميل الصورة
+    downloadCardImage(canvas, symbol) {
+        const link = document.createElement('a');
+        link.download = `fibonacci-analysis-${symbol}-${new Date().toISOString().split('T')[0]}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+        
+        this.showDownloadSuccess(symbol);
+    }
+
+    // إظهار رسالة نجاح النسخ
+    showCopySuccess(symbol) {
+        const message = document.createElement('div');
+        message.className = 'copy-success-message';
+        message.innerHTML = `
+            <div class="success-content">
+                <span class="success-icon">✅</span>
+                <span class="success-text">تم نسخ بطاقة ${symbol} إلى الحافظة!</span>
+            </div>
+        `;
+        
+        document.body.appendChild(message);
+        
+        setTimeout(() => {
+            message.remove();
+        }, 3000);
+    }
+
+    // إظهار رسالة نجاح التحميل
+    showDownloadSuccess(symbol) {
+        const message = document.createElement('div');
+        message.className = 'copy-success-message';
+        message.innerHTML = `
+            <div class="success-content">
+                <span class="success-icon">📥</span>
+                <span class="success-text">تم تحميل بطاقة ${symbol} كصورة!</span>
+            </div>
+        `;
+        
+        document.body.appendChild(message);
+        
+        setTimeout(() => {
+            message.remove();
+        }, 3000);
     }
 }
 

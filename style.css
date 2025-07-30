@@ -423,6 +423,206 @@ html {
 
 
 
+/* زر نسخ البطاقة */
+.card-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.copy-card-btn {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.copy-card-btn:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 215, 0, 0.5);
+    transform: scale(1.1);
+}
+
+/* شارة النسبة الذهبية */
+.golden-ratio-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.9), rgba(255, 193, 7, 0.9));
+    border-radius: 20px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #1a1a2e;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.phi-symbol {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* عنوان فيبوناتشي */
+.fib-header {
+    margin: 15px 0 10px 0;
+    text-align: center;
+}
+
+.fib-header h3 {
+    color: var(--secondary-color);
+    font-family: var(--font-arabic);
+    font-size: 1rem;
+    margin: 0;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+/* التفاصيل الرياضية */
+.mathematical-details {
+    margin: 12px 0;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 0;
+    font-size: 0.85rem;
+}
+
+.detail-label {
+    color: var(--text-muted);
+    font-family: var(--font-arabic);
+}
+
+.detail-value {
+    color: var(--text-light);
+    font-family: var(--font-numbers);
+    font-weight: bold;
+}
+
+/* معلومات المدى */
+.range-info {
+    margin: 12px 0;
+}
+
+.range-bar {
+    position: relative;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.range-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success-color), var(--secondary-color));
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.current-position {
+    position: absolute;
+    top: -2px;
+    width: 10px;
+    height: 10px;
+    background: var(--secondary-color);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-arabic);
+}
+
+/* قسم الاستراتيجية */
+.strategy-section {
+    margin-top: 15px;
+    padding: 10px;
+    background: linear-gradient(135deg, rgba(0, 204, 255, 0.05), rgba(255, 215, 0, 0.05));
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.strategy-section h4 {
+    color: var(--primary-color);
+    font-family: var(--font-arabic);
+    font-size: 0.9rem;
+    margin: 0 0 8px 0;
+}
+
+.strategy-description {
+    color: var(--text-light);
+    font-family: var(--font-arabic);
+    font-size: 0.85rem;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+}
+
+.mathematical-basis {
+    color: var(--text-muted);
+    font-family: var(--font-numbers);
+    font-size: 0.75rem;
+}
+
+/* رسالة نجاح النسخ */
+.copy-success-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, rgba(0, 200, 83, 0.9), rgba(0, 150, 60, 0.9));
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    animation: slideIn 0.3s ease-out;
+}
+
+.success-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.success-icon {
+    font-size: 1.2rem;
+}
+
+.success-text {
+    font-family: var(--font-arabic);
+    font-size: 0.9rem;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 /* مؤشر القوة */
 .strength-indicator {
     display: flex;
