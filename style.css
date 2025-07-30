@@ -472,19 +472,19 @@ html {
 /* شارة النسبة الذهبية */
 .golden-ratio-badge {
     position: absolute;
-    top: 8px;
+    bottom: 8px;
     right: 8px;
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 193, 7, 0.15));
-    border: 1px solid rgba(255, 215, 0, 0.4);
-    border-radius: 12px;
-    padding: 2px 5px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    padding: 1px 4px;
     display: flex;
     align-items: center;
-    gap: 2px;
-    font-size: 0.6rem;
+    gap: 1px;
+    font-size: 0.5rem;
     font-weight: bold;
-    color: #ffd700;
-    backdrop-filter: blur(5px);
+    color: rgba(255, 215, 0, 0.8);
+    backdrop-filter: blur(3px);
     z-index: 1;
 }
 
@@ -612,6 +612,18 @@ html {
 .strategy-box.trend-down {
     border-color: rgba(244, 67, 54, 0.3);
     background: rgba(244, 67, 54, 0.1);
+}
+
+/* رسالة عدم وجود بيانات */
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 20px;
 }
 
 .phi-symbol {
